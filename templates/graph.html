@@ -6,15 +6,21 @@
 <script src="{{ url_for('static', filename='app/js/graph.js') }}" charset="utf-8"></script>
 
 <style>
+#infopanel{
+    height: 500px;
+    color: #550088;
+}
 </style>
 
 <div class="container"><div class="row">
-    <div class="col-md-2 panel panel-default" id="basicinfo">
+    <div class="col-md-3 panel panel-default" id="infopanel" >
         <h3>Company Information</h3>
         <p>Company id: <span id="cid">{{cid}}</span><p>
+        <div id="basicinfo"></div>
+        <div id="nodeinfo"></div>
     </div>
 
-    <div id="d3-container" class="col-md-10">
+    <div id="d3-container" class="col-md-9">
     </div>
 </div></div>
 

@@ -57,6 +57,7 @@
 	};
 
     var update = function(){
+        console.log("in update");
         var links = svg.selectAll(".link")
                     .data(g_links);
                     
@@ -78,6 +79,9 @@
                         .call(force.drag)
                         .attr("r", function(n){ return n.size })
                         .style("fill", function(n){ return color(n.group) })
+                        .on("mouseover", function(n){
+                            $("#nodeinfo").text(n.tooltip);
+                        })
                      .append("title")
                         .text(function(n){ return n.tooltip })
                         .attr("x", function(n){ return n.x })
@@ -167,6 +171,7 @@
                     .attr("fill", "rgba(32,140,153,1)");
         // get target company number for query
         cid = $('#cid').text();
+        console.log("getting "+ cid + ".json......");
 
         // get json through API
         $.getJSON("/company/"+ cid + ".json", function(data){
@@ -183,7 +188,7 @@
             $('#basicinfo').append("<p>Number of links: " + g_links.length + "</p>" );
 
             force.nodes(g_nodes).links(g_links)
-                .charge(-120)
+                .charge(-600)
                 .linkDistance(200)
                 .size([width, height])
                 .start();
