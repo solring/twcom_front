@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<script src="http://code.jquery.com/jquery-1.10.2.js" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='lib/js/d3.v3.min.js') }}" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='app/js/graph.js') }}" charset="utf-8"></script>
+
+<style>
+.basicinfo {
+    margin: 50px;
+}
+</style>
+
+<div class="container"><div class="row">
+    <div class="col-md-2 highlight" id="basicinfo">
+        <h3>Basic Information:</h3>
+        <p>Company id: <span id="cid">{{cid}}</span><p>
+    </div>
+
+    <div id="d3-container" class="col-md-10">
+    </div>
+</div></div>
+
+{% endblock %}
+
+
