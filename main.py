@@ -37,13 +37,18 @@ def search_byname():
     query = request.form['query']
     print "/search/"+query
 
-    if re.match("^[\d]{8}$")!=None:
-        return redirect(url_for("/company/%s" % query))
+    if re.match("^[\d]{8}$", query)!=None:
+        return redirect("company/%s" % query)
 
+    results = []
     for data in getidlike(query):
-        return redirect(url_for("/company/%s" % data["id"]))
-        break
-
+        results.append(data)
+    
+    if len(results) > 1:
+        print "redirect to /company/%s" % results[0]["id"]
+        return redirect("company/%s" % results[0]["id"])
+    else:
+        return "Company not found!"
     #return render_template("index.html")
 
 def build_test_nodes():

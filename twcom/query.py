@@ -287,7 +287,8 @@ def showkv(id, name, info=None, board=None):
         for col, colname in it.ifilter(fun, coldic):
             s1.append(u'%s: %s' % (colname, unicode(info[col])))
 
-    if len(board) > 0:
+    
+    if board is not None and len(board) > 0:
         for k, q in board.iterrows():
             s1.append(u' '.join(map(unicode, q)))
     else:

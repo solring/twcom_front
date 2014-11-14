@@ -63,7 +63,7 @@
         links.enter().append("path")
                         .attr("class", "link")
                         .attr("marker-end", "url(#path-arrow)")
-                        .style("stroke-width", function(d){ return d.weight })
+                        .style("stroke-width", function(d){ return d.width })
                         .style("fill", "none")
                         .style("stroke", "gray");
 
@@ -156,7 +156,7 @@
                 .append("marker")
                     .attr("id", "path-arrow")
                     .attr("viewBox", "0 -5 10 10")
-                    .attr("markerUnits", "strokeWidth")
+                    .attr("markerUnits", "userSpaceOnUse")
                     .attr("refX", 0)
                     .attr("refY", 0)
                     .attr("markerWidth", 8)
@@ -172,18 +172,15 @@
         $.getJSON("/company/"+ cid + ".json", function(data){
                 
             console.log("cid = " + cid);
-            $('#basicInfo').append('<p>Company</p>');
-            $('#basicInfo').append('<p>Company</p>');
-            
-            //var links_post = build_links(data.nodes, data.links);
             
             /* buffer variable for more attributes */
             g_nodes = data.nodes;
             //g_links = links_post;
             g_links = data.links;
 
-            console.log("g_nodes: " + g_nodes.length);
-            console.log("g_links: " + g_links.length);
+
+            $('#basicinfo').append("<p>Number of nodes: " + g_nodes.length + "</p>" );
+            $('#basicinfo').append("<p>Number of links: " + g_links.length + "</p>" );
 
             force.nodes(g_nodes).links(g_links)
                 .charge(-120)

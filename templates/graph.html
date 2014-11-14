@@ -6,14 +6,11 @@
 <script src="{{ url_for('static', filename='app/js/graph.js') }}" charset="utf-8"></script>
 
 <style>
-.basicinfo {
-    margin: 50px;
-}
 </style>
 
 <div class="container"><div class="row">
-    <div class="col-md-2 highlight" id="basicinfo">
-        <h3>Basic Information:</h3>
+    <div class="col-md-2 panel panel-default" id="basicinfo">
+        <h3>Company Information</h3>
         <p>Company id: <span id="cid">{{cid}}</span><p>
     </div>
 

@@ -11,11 +11,9 @@
 <h1>政商關係圖</h1>
 <p>可輸入公司統一編號, 公司名稱搜尋</p>
 
-{% for d in data %}
-    <h2>{{d.id}}</h2> {{d.name}}, {{d.market}}<br>
-{% else %}
-    <p>route: /company/[company stock id]<p>
-{% endfor %}
+<p>直接使用route: /company/[company id]<p>
+
+<p>Query持續增加中...</p>
     
 {% endblock %}
 
