@@ -10,7 +10,8 @@ from traceback import print_exc
 from pdb import set_trace
 import re
 from collections import defaultdict
-from vis import output as opt
+#from vis import output as opt
+import output as opt
 from os.path import join
 
 
@@ -229,9 +230,9 @@ def exp_boss(G, fi, **kwargs):
         output = cluster(nx.betweenness_centrality(G))
         setnode(G, 'group', output)
 
-    fi = join(kwargs.get('path', ''), fi + '.json')
-    opt.exp_graph(G, fi)
-
+    #fi = join(kwargs.get('path', ''), fi + '.json')
+    #opt.exp_graph(G, fi)
+    return opt.exp_as_json(G)
 
 def exp_company(G, fi, **kwargs):
     # Export company network
@@ -254,8 +255,10 @@ def exp_company(G, fi, **kwargs):
         output = cluster(nx.betweenness_centrality(G1))
         setnode(G, 'group', output)
 
-    fi = join(kwargs.get('path', ''), fi + '.json')
-    opt.exp_graph(G, fi)
+    #fi = join(kwargs.get('path', ''), fi + '.json')
+    #opt.exp_graph(G, fi)
+    return opt.exp_as_json(G)
+
 
 
 def getBoardbyID(ids):
