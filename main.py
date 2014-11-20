@@ -1,17 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from pymongo import MongoClient
+#from pymongo import MongoClient
 from flask import Flask, request, redirect, url_for, render_template
 import json
 from twcom.query import *
+import requests
 
-host = "106.187.49.17"
-port = 27017
-user = "reader"
-pwd = "twcom"
-dbname = "twcom"
-url = "mongodb://%s:%s@%s:%d" % (user, pwd, host, port)
 
 db = None
 col = None
@@ -67,15 +62,14 @@ def getJsonById(cid):
     if cid == 1234:
         return build_test_nodes()
 
-    if col == None:
-        return "database collection unavailable."
-    
-
     #data = col.find({ "id" : str(cid) })
+    data = requests.get("http://dataing.pw/com?id=%s" % cid)
+    print data.json()
+    return data.json()
 
-    G = get_network(cid, maxlvl=1)
-    if G:
-        return exp_company(G, "%s.cache" % cid)
+#    G = get_network(cid, maxlvl=1)
+#    if G:
+#        return exp_company(G, "%s.cache" % cid)
 
 @app.route("/company/<cid>")
 def show_company(cid):
@@ -88,17 +82,11 @@ def show_company(cid):
     return render_template('graph.html', cid=cid)
     
 
-
 if __name__ == "__main__":
-    
-    #dbclient = MongoClient(host, port)
-    #db = dbclient[dbname]
-    #db.authenticate(user, pwd)
-    #col = db["cominfo"]
-    col = init() # from utils.py
-    print "========== data base initialized =========="
-    #cols = db.collection_names(include_system_collections=False)
+
+    #col = init()
 
     app.debug = True
+    print "========== app initialized =========="
     app.run()
 
