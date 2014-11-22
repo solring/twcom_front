@@ -80,7 +80,8 @@
                         .attr("r", function(n){ return n.size })
                         .style("fill", function(n){ return color(n.group) })
                         .on("mouseover", function(n){
-                            $("#nodeinfo").text(n.tooltip);
+                            var info = n.tooltip.replace(/\n/g, "<br> ");
+                            $("#nodeinfo").append(info);
                         })
                      .append("title")
                         .text(function(n){ return n.tooltip })
@@ -171,10 +172,11 @@
                     .attr("fill", "rgba(32,140,153,1)");
         // get target company number for query
         cid = $('#cid').text();
-        console.log("getting "+ cid + ".json......");
+        restapi = $('#restapi').text();
+        console.log("getting "+ cid + "from "+ restapi + "......");
 
         // get json through API
-        $.getJSON("/company/"+ cid + ".json", function(data){
+        $.getJSON("/cors?api="+ encodeURI(restapi) , function(data){
                 
             console.log("cid = " + cid);
             
