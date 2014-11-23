@@ -81,7 +81,7 @@
                         .style("fill", function(n){ return color(n.group) })
                         .on("mouseover", function(n){
                             var info = n.tooltip.replace(/\n/g, "<br> ");
-                            $("#nodeinfo").append(info);
+                            $("#nodeinfo").empty().append(info);
                         })
                      .append("title")
                         .text(function(n){ return n.tooltip })
@@ -176,7 +176,7 @@
         console.log("getting "+ cid + "from "+ restapi + "......");
 
         // get json through API
-        $.getJSON("/cors?api="+ encodeURI(restapi) , function(data){
+        $.getJSON("/getjson?api="+ encodeURI(restapi) , function(data){
                 
             console.log("cid = " + cid);
             

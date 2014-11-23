@@ -4,7 +4,7 @@
 #from pymongo import MongoClient
 from flask import Flask, request, redirect, url_for, render_template
 import json
-#from twcom.query import *
+import re
 import requests
 from urllib import unquote
 
@@ -15,10 +15,14 @@ app = Flask(__name__)
 
 
 def getidlike(query):
-    return requests.get("http://dataing.pw/query?com=%s" % query)
+    res = requests.get("http://dataing.pw/query?com=%s" % query)
+    if res!="null":
+        return json.loads(res.json())
 
 def getbosslike(query):
-    return reqults.get("http://dataing.pw/query?boss=%s" % query)
+    res = requests.get("http://dataing.pw/query?boss=%s" % query)
+    if res!="null":
+        return json.loads(res.json())
 
 def to_node(d):
     return {"id": d["id"],
@@ -30,10 +34,7 @@ def mainpage():
     print "main page"
     return render_template('index.html')
 
-@app.route("/search")
-def search_dummy():
-    return "test search route"
-
+# --- search function ---
 @app.route("/search", methods=['POST'])
 def search_companynet():
     option = request.form['searchopt']
@@ -46,33 +47,31 @@ def search_companynet():
             return redirect("company/id/%s" % query)
 
         # search by company name
-        results = []
-        for data in getidlike(query):
-            results.append(data)
+        results = getidlike(query)
+        ids = results.keys()
     
-        if len(results) > 1:
-            print "redirect to /company/id/%s" % results[0]["id"]
-            return redirect("company/id/%s" % results[0]["id"])
+        if len(ids) > 1:
+            print "redirect to /company/id/%s" % ids[0]
+            return redirect("company/id/%s" % ids[0])
         else:
             return "Company not found!"
 
     elif option == "boss":
-        reqults = []
+        #results = getbosslike(query) 
+        #ids = results.keys()
+        
+        #if len(ids) > 1:
+        #    print "redirect to /company/id/%s" % ids[0]
+        #    return redirect("company/id/%s" % ids[0])
+        #else:
+        #    return "Company not found!"
+        return redirect("company/boss/%s" % query)
 
 
-def build_test_nodes():
-    n1 = {"id": 1, "name": "test1"};
-    n2 = {"id": 2, "name": "test2"};
-    n3 = {"id": 3, "name": "test3"};
-    nodes = [n1, n2, n3];
-    links = [{"src": n1, "dst": n2},{"src": n2, "dst": n3}];
-    result = json.dumps({"nodes": nodes, "links": links});
-    return result
-
-@app.route("/cors")
+# --- for Cross-Origin Resources Sharing ---
+@app.route("/getjson")
 def getJson():
-    print 'test' 
-    #data = col.find({ "id" : str(cid) })
+    
     if 'api' in request.args:
         url = request.args['api']
         print unquote(url)
@@ -93,13 +92,15 @@ def show_company_byid(cid):
     #else:
     #    res += "Cannot find company with id %d" % cid
     url = "http://dataing.pw/com?id=%s" % cid
-    return render_template('graph.html', cid=cid, url=url)
+    q = u"公司編號 %s" % cid
+    return render_template('graph.html', query=q, url=url)
 
 
 @app.route("/company/boss/<boss>")
 def show_company_byboss(boss):
-    url = "http://dataing.pw/com?boss=%s" % boss 
-    return render_template('graph.html', cid=boss, url=url)
+    url = "http://dataing.pw/com?boss=%s" % boss
+    q = u"董事長姓名 %s" % boss
+    return render_template('graph.html', query=q, url=url)
 
 
 if __name__ == "__main__":
