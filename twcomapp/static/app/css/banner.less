@@ -1,0 +1,25 @@
+@text-bg: rgba(100,0,100,0.7);
+
+.bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: 100%;
+    height: auto;
+    z-index: -1;
+}
+
+.jumbotron.banner {
+    position: relative;
+    background-color: transparent;
+    
+    h1,h2{
+        display: inline-block;
+        color: #fff;
+        background-color: @text-bg;
+    }
+    h3,p{
+        color: #fff;
+        text-shadow: 2px 2px 5px @text-bg;
+    }
+}

@@ -1,0 +1,90 @@
+#drawarea {
+	background-color: #ffffff;
+}
+
+#search-panel {
+    position: fixed;
+    left: 0px;
+    top: 82px;
+    width: 335px;
+    border: 1px solid #eeeeee;
+    padding: 10px 3px 10px 3px;
+	
+	background-color: #ffffff;
+
+	
+	-webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+	
+    -webkit-border-top-right-radius: 6px;
+    -webkit-border-bottom-right-radius: 6px;
+    -moz-border-radius-topright: 6px;
+    -moz-border-radius-bottomright: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+#search-panel hr{
+	/*
+	border-top: 2px solid #BEC0C3;
+	border-bottom: 1px solid rgba(113,246,240,1)
+	 */
+	margin: 10px 5px;
+	height: 3px;
+	-webkit-box-shadow: inset 1px 2px 10px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: inset 1px 2px 10px rgba(0, 0, 0, 0.1);
+	box-shadow: inset 1px 2px 10px rgba(0, 0, 0, 0.1);
+	border-top-left-radius: 2px;
+	-moz-border-top-left-radius: 2px;
+	-webkit-border-top-left-radius: 2px;
+	
+	border-top-right-radius: 2px;
+	-moz-border-top-right-radius: 2px;
+	-webkit-border-top-right-radius: 2px;
+}
+
+#erdos-score {
+    padding: 20px 20px;
+    font-size: 60px;
+    color: #00c;
+}
+
+.search-panel-erdos {
+    height: 500px;
+    padding: 15px 15px;
+    border: 1px solid #aaa;
+    background-color: #FFFFFF;
+}
+
+#search-form {
+    margin-bottom: 5px;
+}
+
+.lifter {
+    margin-left: 1px;
+    padding: 0px;
+    vertical-align: bottom;
+}
+
+#lift-close {
+    position: fixed;
+    top: 112px;
+    left: -5px;
+    display: none;
+}
+
+#loading-modal {
+    border: 1px solid #fbeed5;
+    background-color: #fcf8e3;
+}
+
+.item {
+    padding-left: 5px;
+}
+
+.item .desc {
+    padding-left: 5px;
+    font-size: 8px;
+    font-style: italic;
+}
