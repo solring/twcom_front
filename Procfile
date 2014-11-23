@@ -1,1 +1,1 @@
-web: gunicorn twcomapp:app
+web: gunicorn twcomapp:app --log-file -
