@@ -3,6 +3,7 @@
 
 #from pymongo import MongoClient
 from flask import Flask, request, redirect, url_for, render_template
+from werkzeug.contrib.fixers import ProxyFix # for gunicorn
 import json
 import re
 import requests
@@ -12,7 +13,7 @@ db = None
 col = None
 
 app = Flask(__name__)
-
+app.wsgi_app = ProxyFix(app.wsgi_app) # for gunicorn
 
 def getidlike(query):
     res = requests.get("http://dataing.pw/query?com=%s" % query)
