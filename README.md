@@ -6,10 +6,10 @@ TW Company front-end with Data Vitualization
 
 pip install -r requirements.txt
 
-python main.py
+gunicorn twcomapp:app
 
 ## Issues
-- Search function
+- Search function (bugged on heroku)
 - Boss network
 - Integration of company & boss network
 - ......

@@ -1,5 +1,5 @@
 (function($){
-    var width = 960, height = 500;
+    var width = 1000, height = 700;
     var color = d3.scale.category20();
     var force = d3.layout.force();
     var g_nodes = force.nodes();
@@ -148,14 +148,14 @@
     
     $('document').ready(function(){
         console.log("document ready");
-
+        height = window.innerHeight;
         // initialize svg object
         svg = d3.select("#d3-container")
                 .append("svg")
                     .attr("width", width)
                     .attr("height", height);
 
-       svg.append("defs").selectAll("marker")
+        svg.append("defs").selectAll("marker")
                .data(["arrow"])
             .enter()
                 .append("marker")
@@ -170,6 +170,9 @@
                 .append("svg:path")
                     .attr("d", "M0,-5L10,0L0,5")
                     .attr("fill", "rgba(32,140,153,1)");
+        
+        $('#infopanel').css("height", height);
+        
         // get target company number for query
         cid = $('#cid').text();
         restapi = $('#restapi').text();
