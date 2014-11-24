@@ -38,6 +38,7 @@ def mainpage():
 # --- search function ---
 @app.route("/search", methods=['POST'])
 def search_companynet():
+    print "in search"
     option = request.form['searchopt']
     query = request.form['query']
     print "/search/"+query
