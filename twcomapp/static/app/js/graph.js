@@ -147,43 +147,60 @@
     };
     
     $('document').ready(function(){
-        console.log("document ready");
         height = window.innerHeight;
-        // initialize svg object
-        svg = d3.select("#d3-container")
-                .append("svg")
-                    .attr("width", width)
-                    .attr("height", height);
-
-        svg.append("defs").selectAll("marker")
-               .data(["arrow"])
-            .enter()
-                .append("marker")
-                    .attr("id", "path-arrow")
-                    .attr("viewBox", "0 -5 10 10")
-                    .attr("markerUnits", "userSpaceOnUse")
-                    .attr("refX", 0)
-                    .attr("refY", 0)
-                    .attr("markerWidth", 8)
-                    .attr("markerHeight", 15)
-                    .attr("orient", "auto")
-                .append("svg:path")
-                    .attr("d", "M0,-5L10,0L0,5")
-                    .attr("fill", "rgba(32,140,153,1)");
-        
-        $('#infopanel').css("height", height);
-        
+                
         // get target company number for query
         cid = $('#cid').text();
         restapi = $('#restapi').text();
-        console.log("getting "+ cid + "from "+ restapi + "......");
+        console.log("getting "+ cid + "from "+ restapi + "......" + encodeURIComponent(restapi) + " 4");
 
         // get json through API
-        $.getJSON("/getjson?api="+ encodeURI(restapi) , function(data){
-                
-            console.log("cid = " + cid);
+        $.getJSON("/getjson?api="+ encodeURIComponent(restapi) , function(data){
+        
+            // if error, show error msgs
+            if(data.error!=null){
+                console.log("error:" + data.error);
+                $('#d3-container').append("<div class=\"alert alert-danger\">" + data.error +"</div>");
+                return;
+            }
+
+            // if need to choose which target company/board network to draw
+            /*if(data.targets!=null){
+                var targets = data.targets;
+                for(var i=0; i<targets.length){
+                    var well = "<div id=\"well" + i +"\" class=\"well\">";
+                    well += targets[i].
+                    $('#d3-container').append("<div id=\"well" + i +"\" class=\"well\"></div>");
+                    $('#well'+i).append
+                }
+                return;
+            }*/
             
-            /* buffer variable for more attributes */
+            // initialize svg object
+            svg = d3.select("#d3-container")
+                    .append("svg")
+                        .attr("width", width)
+                        .attr("height", height);
+
+            svg.append("defs").selectAll("marker")
+                   .data(["arrow"])
+                .enter()
+                    .append("marker")
+                        .attr("id", "path-arrow")
+                        .attr("viewBox", "0 -5 10 10")
+                        .attr("markerUnits", "userSpaceOnUse")
+                        .attr("refX", 0)
+                        .attr("refY", 0)
+                        .attr("markerWidth", 8)
+                        .attr("markerHeight", 15)
+                        .attr("orient", "auto")
+                    .append("svg:path")
+                        .attr("d", "M0,-5L10,0L0,5")
+                        .attr("fill", "rgba(32,140,153,1)");
+            // initialize company infomations 
+            $('#infopanel').css("height", height);
+
+       
             g_nodes = data.nodes;
             //g_links = links_post;
             g_links = data.links;

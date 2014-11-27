@@ -8,13 +8,33 @@
 
 <div id="basicInfo"></div>
 
-<h1>政商關係圖</h1>
-<p>可輸入公司統一編號, 公司名稱搜尋</p>
+<h2>政商關係圖</h2>
+<hr>
+<h3>公司網路</h3>
+有投資關係的公司關係圖
+<h3>董監事網路</h3>
+公司董監事關係
+<h3>相同地址公司</h3>
+相同地址的公司組成
+<h3>董監事公司網路</h3>
+有相同董監事及投資關係的公司網路
+<br>
 
-<p>直接使用route: </p>
+<h2>搜尋方法</h2>
+<hr>
+<p>by Company: 可ㄧ輸入公司統一編號，公司名稱</p>
+<p>by Boss: 董事長姓名搜尋</p>
+<br>
+
+<h2>直接使用route</h2>
+<hr>
 <p>/company/id/[company id]</p>
 <p>/company/boss/[董監事姓名]</p>
+<p>/board/id/[company id]</p>
+<p>/companyaddr/id/[company id]</p>
+<p>/companyboard/id/[company id]</p>
 
+<br>
 <p>Query持續增加中...</p>
     
 {% endblock %}

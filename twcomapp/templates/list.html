@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<style>
+#infopanel{
+    color: #550088;
+    overflow: scroll;
+}
+</style>
+
+<div class="graph-container"><div class="row">
+    <div class="col-md-3 panel panel-default" id="infopanel" >
+        <div id="basicinfo">
+            <h3>關係圖種類：{{graph}}</h3>
+            <h3>{{query}}</h3> 
+        </div>
+        <div id="nodeinfo"></div>
+    </div>
+
+    <div id="d3-container" class="col-md-9">
+        <h3>搜尋結果</h3>
+        <ul>
+        {% for k, v in targets.iteritems() %}
+            <li><a href="/{{graph}}/{{querytype}}/{{k}}">
+                <p>{{k}}</p>
+                {% if querytype=='boss'%}
+                <ul>
+                    {% for name in v %}
+                        <li>{{name}}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                {{v}}
+                {% endif %}
+            </a></li>
+        {% endfor %}
+        </ul>    
+    </div>
+</div></div>
+<div style="visibility: hidden;" id="restapi">{{url}}</div>
+{% endblock %}
+
+
