@@ -53,7 +53,6 @@ def search_companynet():
             option = request.form.getlist('searchopt')[0]
             query = request.form.getlist('query')[0]
             graph = request.form.getlist('graphopt')[0]
-            print "/search/"+query
 
         except:
             return "Error: unable to get the form"
