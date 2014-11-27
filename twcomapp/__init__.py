@@ -46,12 +46,13 @@ def search_companynet():
         
         try:
             if request.form is not None:
-                print request.form.keys()
+                print request.form
+                print type(request.form)
             else:
                 print "form empty"
-            option = request.form['searchopt']
-            query = request.form['query']
-            graph = request.form['graphopt']
+            option = request.getlist('searchopt')[0]
+            query = request.getlist('query')[0]
+            graph = request.getlist('graphopt')[0]
             print "/search/"+query
 
         except:
