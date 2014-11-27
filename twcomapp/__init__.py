@@ -45,6 +45,10 @@ def search_companynet():
     if request.method == 'POST':
         
         try:
+            if request.form is not None:
+                print request.form.keys()
+            else:
+                print "form empty"
             option = request.form['searchopt']
             query = request.form['query']
             graph = request.form['graphopt']
