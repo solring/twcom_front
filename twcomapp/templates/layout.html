@@ -50,39 +50,30 @@ var changeGraph = function(){
     
     if(id=="Comnet"){ //company
         
-        this.class 
         $('#graphopt').attr("value", "company");
-        $('#search-dropdown').empty()
-            .append("<li><a id=\"byCom\" href=\"#\">By Company</a></li>")
-            .append("<li><a id=\"byBoss\" href=\"#\">By Boss</a></li>")
-        $('#byCom').on("click", changeSearchOpt);
-        $('#byBoss').on("click", changeSearchOpt);
+//        $('#search-dropdown').empty()
+//            .append("<li><a id=\"byCom\" href=\"#\">By Company</a></li>")
+//            .append("<li><a id=\"byBoss\" href=\"#\">By Boss</a></li>")
+//        $('#byCom').on("click", changeSearchOpt);
+//        $('#byBoss').on("click", changeSearchOpt);
     
     }else if(id=="Boardnet"){
 
         $('#graphopt').attr("value", "board");
-        $('#search-dropdown').empty()
-            .append("<li><a id=\"byCom\" href=\"#\">By Company</a></li>");
-        $('#byCom').on("click", changeSearchOpt);
+//        $('#search-dropdown').empty()
+//            .append("<li><a id=\"byCom\" href=\"#\">By Company</a></li>");
+//        $('#byCom').on("click", changeSearchOpt);
 
-        changeSearchOpt.call( $('#byCom')  );
+//        changeSearchOpt.call( $('#byCom')  );
     
     }else if(id=="Addrnet"){
     
         $('#graphopt').attr("value", "companyaddr");
-        $('#search-dropdown').empty()
-            .append("<li><a id=\"byCom\" href=\"#\">By Company</a></li>");
-        $('#byCom').on("click", changeSearchOpt);
 
-        changeSearchOpt.call( $('#byCom')  );
     }else if(id=="CompanyBoardnet"){
         
         $('#graphopt').attr("value", "companyboard");
-        $('#search-dropdown').empty()
-            .append("<li><a id=\"byCom\" href=\"#\">By Company</a></li>");
-        $('#byCom').on("click", changeSearchOpt);
 
-        changeSearchOpt.call( $('#byCom')  );
     }
 
     return false;

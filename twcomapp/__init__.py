@@ -77,7 +77,7 @@ def search_companynet():
             results = getbosslike(query)
             print results
             q = u"董事長姓名 %s" % query
-            return render_template('list.html', graph=graph, query=q, targets=results, querytype='id')
+            return render_template('list.html', graph=graph, query=q, targets=results, querytype='boss')
             #return redirect("company/boss/%s" % query)
 
 
