@@ -1,14 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
+<img class="center-block" src="{{ url_for('static', filename='app/img/index2.png') }}">
 
-
-<div id="d3_container" class="container">
-
-</div>
-
-<div id="basicInfo"></div>
-
-<h2>政商關係圖</h2>
+<div class="row">
+<div class="col-lg-4">
+<h2>圖形種類</h2>
 <hr>
 <h3>公司網路</h3>
 有投資關係的公司關係圖
@@ -18,14 +14,16 @@
 相同地址的公司組成
 <h3>董監事公司網路</h3>
 有相同董監事及投資關係的公司網路
-<br>
+</div>    
 
+<div class="col-lg-4">
 <h2>搜尋方法</h2>
 <hr>
 <p>by Company: 可ㄧ輸入公司統一編號，公司名稱</p>
 <p>by Boss: 董事長姓名搜尋</p>
-<br>
 
+</div>    
+<div class="col-lg-4">
 <h2>直接使用route</h2>
 <hr>
 <p>/company/id/[company id]</p>
@@ -34,9 +32,12 @@
 <p>/companyaddr/id/[company id]</p>
 <p>/companyboard/id/[company id]</p>
 
-<br>
-<p>Query持續增加中...</p>
-    
+</div>    
+</div>    
+<div id="d3_container" class="container">
+</div>
+
+<div id="basicInfo"></div>
 {% endblock %}
 
 
