@@ -30,7 +30,7 @@ def to_node(d):
             "name": d["name"],
             "market": d["market"] }
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def mainpage():
     print "main page"
     return render_template('index.html')
@@ -46,14 +46,11 @@ def search_companynet():
         
         try:
             if request.form is not None:
-                print request.form
-                print type(request.form)
+                option = request.form.getlist('searchopt')[0]
+                query = request.form.getlist('query')[0]
+                graph = request.form.getlist('graphopt')[0]
             else:
-                print "form empty"
-            option = request.form.getlist('searchopt')[0]
-            query = request.form.getlist('query')[0]
-            graph = request.form.getlist('graphopt')[0]
-
+                return "Error: form empty"
         except:
             return "Error: unable to get the form"
         
@@ -69,7 +66,8 @@ def search_companynet():
             if len(results) == 1:
                 return redirect("%s/id/%s" % (graph, results.keys()[0]))
             print "graph=%s" % graph 
-            return render_template('list.html', graph=graph, query=q, targets=results, querytype='id')
+            return  render_template('list.html', graph=graph, query=q, targets=results, querytype='id')
+            #return json.dumps({"content": tmpl})
             #ids = results.keys()
             #if len(ids) > 1:
             #    print "redirect to /company/id/%s" % ids[0]
@@ -81,6 +79,7 @@ def search_companynet():
             results = getbosslike(query)
             print results
             q = u"董事長姓名 %s" % query
+
             return render_template('list.html', graph=graph, query=q, targets=results, querytype='boss')
             #return redirect("company/boss/%s" % query)
 
@@ -120,7 +119,7 @@ def show_company_byid(cid):
     url = "http://dataing.pw/com?id=%s&maxlvl=%s" % (cid, maxlvl)
     q = u"公司編號 %s" % cid
     info = u"公司關係圖"
-    return render_template('graph.html', query=q, url=url, graphinfo=info)
+    return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
 
 
 @app.route("/company/boss/<boss>")
@@ -132,7 +131,7 @@ def show_company_byboss(boss):
     url = "http://dataing.pw/com?boss=%s&maxlvl=%s" % (boss, maxlvl)
     q = u"董事長姓名 %s" % boss
     info = u"公司關係圖"
-    return render_template('graph.html', query=q, url=url, graphinfo=info)
+    return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
 
 
 @app.route("/companyaddr/id/<cid>")
@@ -144,7 +143,7 @@ def show_addrnet_byid(cid):
     url = "http://dataing.pw/com?comaddr=%s&maxlvl=%s" % (cid, maxlvl)
     q = u"公司編號 %s" % cid
     info = u"公司關係圖-同地址之公司"
-    return render_template('graph.html', query=q, url=url, graphinfo=info)
+    return render_template('graph.html', graph="companyaddr", query=q, url=url, graphinfo=info)
 
 @app.route("/companyboard/id/<cid>")
 def show_boardnet_byboard(cid):
@@ -155,7 +154,8 @@ def show_boardnet_byboard(cid):
     url = "http://dataing.pw/com?comboss=%s&maxlvl=%s" % (cid, maxlvl)
     q = u"公司編號 %s" % cid
     info = u"公司關係圖-子母公司及共同董事關係"
-    return render_template('graph.html', query=q, url=url, graphinfo=info)
+    
+    return render_template('graph.html', graph="companyboard", query=q, url=url, graphinfo=info)
 
 
 @app.route("/board/id/<cid>")
@@ -167,5 +167,5 @@ def show_boardnet_byid(cid):
     url = "http://dataing.pw/boss?id=%s&maxlvl=%s" %(cid, maxlvl)
     q = u"公司編號 %s" % cid
     info = u"公司董事關係圖"
-    return render_template('graph.html', query=q, url=url, graphinfo=info)
+    return render_template('graph.html', graph="board", query=q, url=url, graphinfo=info)
 

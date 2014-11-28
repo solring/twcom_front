@@ -47,41 +47,36 @@ var changeGraph = function(){
     
     var id = $(this).attr("id");
     console.log("changeGraph: caller = " + id);
-    
-    if(id=="Comnet"){ //company
-        
-        $('#graphopt').attr("value", "company");
-//        $('#search-dropdown').empty()
-//            .append("<li><a id=\"byCom\" href=\"#\">By Company</a></li>")
-//            .append("<li><a id=\"byBoss\" href=\"#\">By Boss</a></li>")
-//        $('#byCom').on("click", changeSearchOpt);
-//        $('#byBoss').on("click", changeSearchOpt);
-    
-    }else if(id=="Boardnet"){
-
-        $('#graphopt').attr("value", "board");
-//        $('#search-dropdown').empty()
-//            .append("<li><a id=\"byCom\" href=\"#\">By Company</a></li>");
-//        $('#byCom').on("click", changeSearchOpt);
-
-//        changeSearchOpt.call( $('#byCom')  );
-    
-    }else if(id=="Addrnet"){
-    
-        $('#graphopt').attr("value", "companyaddr");
-
-    }else if(id=="CompanyBoardnet"){
-        
-        $('#graphopt').attr("value", "companyboard");
-
-    }
+   
+    $('#graphopt').attr("value", id);
 
     return false;
 };
+
+$('document').ready(function(){
+    $('#searchform').submit(function(event){
+       event.preventDefault();
+
+       console.log("tttt");
+       var url = "/search";
+       $.ajax({
+            type: "POST",
+            url: url,
+            data: $('#searchform').serialize(),
+            success: function(data){
+                $('#maincontainer').empty().append(data);        
+                console.log("after ajax");
+            },
+            error: function(err){
+                console.log(err);
+            }           
+       });
+    });
+
+});
 </script>
 
 </head>
-
 
 
 <body>
@@ -92,15 +87,15 @@ var changeGraph = function(){
               <a class="navbar-brand" href="/">政商關係圖</a>
           </div>
           <div class="collapse navbar-collapse" id="main-menu-collapse">
-            <ul class="nav navbar-nav">
-              <li class="active"><a id="Comnet" href="#" onclick="changeGraph.call(this);">公司網路</a></li>
-              <li><a id="Boardnet" href="#" onclick="changeGraph.call(this);">董監事網路</a></li>
-              <li><a id="Addrnet" href="#" onclick="changeGraph.call(this);">公司網路 by 地址</a></li>
-              <li><a id="CompanyBoardnet" href="#" onclick="changeGraph.call(this);">公司&董監事網路</a></li>
+            <ul class="nav navbar-nav" id="graph-nav">
+              <li class="active"><a id="company" href="#" onclick="changeGraph.call(this);">公司網路</a></li>
+              <li><a id="board" href="#" onclick="changeGraph.call(this);">董監事網路</a></li>
+              <li><a id="companyaddr" href="#" onclick="changeGraph.call(this);">公司網路 by 地址</a></li>
+              <li><a id="companyboard" href="#" onclick="changeGraph.call(this);">公司&董監事網路</a></li>
             </ul>
 
             <!-- Search button and field -->
-            <form class="navbar-form navbar-left" action="/search" method="post" role="search">
+            <form id="searchform" class="navbar-form navbar-left" action="/" method="post" role="search">
                 <div class="form-group"><div class="input-group">
 
                     <div class="input-group-btn">
@@ -131,7 +126,7 @@ var changeGraph = function(){
     <div style="height: 50px; width: auto; background-color: white">
     </div>
 
-    <div class="container">
+    <div id="maincontainer" class="container">
     {% block content %}
     {% endblock %}
     </div>

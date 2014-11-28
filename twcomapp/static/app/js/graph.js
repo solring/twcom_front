@@ -148,7 +148,13 @@
     
     $('document').ready(function(){
         height = window.innerHeight;
-                
+        
+        //updata navbar
+        var navs = $('#graph-nav').children().removeClass('active');
+        var graphtype = $('#graphtype').text();
+        console.log("graph type: "+graphtype)
+        $("#"+graphtype).parent().addClass('active');
+
         // get target company number for query
         cid = $('#cid').text();
         restapi = $('#restapi').text();
