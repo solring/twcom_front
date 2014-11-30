@@ -4,23 +4,16 @@
 <script src="{{ url_for('static', filename='lib/js/d3.v3.min.js') }}" charset="utf-8"></script>
 <script src="{{ url_for('static', filename='app/js/graph.js') }}" charset="utf-8"></script>
 
-<style>
-#infopanel{
-    overflow: scroll;
-}
-#infopanel h1, h2, h3{
-    color: #511789;
-}
-</style>
 
 <div style="height: 50px; width: auto; background-color: white">
 </div>
 
 <div class="graph-container"><div class="row">
-    <div class="col-md-3 panel panel-default" id="infopanel" >
-        <h2>{{graphinfo}} </h2> 
-        <h3>Company Information</h3>
+    <div class="col-md-3 col-sm-3 sidebar info" id="infopanel" >
+        <h2>{{graphinfo.topic}} </h2> 
         <p>Query: <span id="cid">{{query}}</span><p>
+        <p>{{graphinfo.explain}}</p>
+        <hr>
         
         <h3>基本資料</h3>
         <hr>

@@ -118,7 +118,10 @@ def show_company_byid(cid):
     print 'test'
     url = "http://dataing.pw/com?id=%s&maxlvl=%s" % (cid, maxlvl)
     q = u"公司編號 %s" % cid
-    info = u"公司關係圖"
+    
+    title = u"公司關係圖"
+    explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別"
+    info = {"topic":title, "explain":explain}
     return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
 
 
@@ -130,7 +133,9 @@ def show_company_byboss(boss):
         maxlvl = '1'
     url = "http://dataing.pw/com?boss=%s&maxlvl=%s" % (boss, maxlvl)
     q = u"董事長姓名 %s" % boss
-    info = u"公司關係圖"
+    title = u"公司關係圖"
+    explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別"
+    info = {"topic":title, "explain":explain}
     return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
 
 
@@ -142,7 +147,9 @@ def show_addrnet_byid(cid):
         maxlvl = '1'
     url = "http://dataing.pw/com?comaddr=%s&maxlvl=%s" % (cid, maxlvl)
     q = u"公司編號 %s" % cid
-    info = u"公司關係圖-同地址之公司"
+    title = u"公司關係圖-同地址"
+    explain = u"地址相同的公司。"
+    info = {"topic":title, "explain":explain}
     return render_template('graph.html', graph="companyaddr", query=q, url=url, graphinfo=info)
 
 @app.route("/companyboard/id/<cid>")
@@ -153,7 +160,9 @@ def show_boardnet_byboard(cid):
         maxlvl = '1'
     url = "http://dataing.pw/com?comboss=%s&maxlvl=%s" % (cid, maxlvl)
     q = u"公司編號 %s" % cid
-    info = u"公司關係圖-子母公司及共同董事關係"
+    title = u"子母公司及共同董事關係圖"
+    explain = u"有直接投資關係的公司。顏色表示有無和查詢的公司有共同董事(同顏色表示有)"
+    info = {"topic":title, "explain":explain}
     
     return render_template('graph.html', graph="companyboard", query=q, url=url, graphinfo=info)
 
@@ -166,6 +175,8 @@ def show_boardnet_byid(cid):
         maxlvl = '1'
     url = "http://dataing.pw/boss?id=%s&maxlvl=%s" %(cid, maxlvl)
     q = u"公司編號 %s" % cid
-    info = u"公司董事關係圖"
+    title = u"公司董事關係圖"
+    explain = u"有共同公司的董事。顏色表示經過betweenness centrality分類後的類別"
+    info = {"topic":title, "explain":explain}
     return render_template('graph.html', graph="board", query=q, url=url, graphinfo=info)
 
