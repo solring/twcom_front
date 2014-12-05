@@ -5,7 +5,7 @@
 <script src="{{ url_for('static', filename='app/js/graph.js') }}" charset="utf-8"></script>
 
 
-<div style="height: 50px; width: auto; background-color: white">
+<div style="height: 80px; width: auto; background-color: white">
 </div>
 
 <div class="graph-container"><div class="row">
@@ -24,7 +24,13 @@
         <div id="nodeinfo"></div>
     </div>
 
-    <div id="d3-container" class="col-md-9">
+    <div class="col-md-9">
+        <div id="zoom-btn-group" class="btn-group">
+           <button class="btn btn-default" id="zoom-in"><i class="fa fa-search-plus fa-2x"></i></button> 
+           <button class="btn btn-default" id="zoom-out"><i class="fa fa-search-minus fa-2x"></i></button> 
+        </div>
+        <div id="d3-container">
+        </div>
     </div>
 </div></div>
 <div style="visibility: hidden;" id="restapi">{{url}}</div>

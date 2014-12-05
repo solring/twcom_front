@@ -1,12 +1,34 @@
 (function($){
     var width = 1000, height = 700;
+    var link_len = 200;
     var color = d3.scale.category20();
     var force = d3.layout.force();
     var g_nodes = force.nodes();
     var g_links = force.links();
     var svg = undefined;
     var cid = "0";
-    var circle_size = 3;
+    var scale = 1;
+    
+    var zoom_out= function(){
+            if(scale>1){
+                scale -= 0.2;
+                svg.selectAll("circle").attr("r", function(d) {
+                    return d.size * scale;
+                });
+                force.linkDistance(link_len * scale).start();
+                svg.selectAll(".link").attr("d", linkArc);
+            }
+    };
+    var zoom_in= function(){
+            if(scale<10){
+                scale += 0.2;
+                svg.selectAll("circle").attr("r", function(d) {
+                    return d.size * scale;
+                });
+                force.linkDistance(link_len * scale).start();
+                svg.selectAll(".link").attr("d", linkArc);
+            }
+    };
 
     var linkArc = function(d) {
         var dx = d.target.x - d.source.x,
@@ -170,17 +192,6 @@
                 return;
             }
 
-            // if need to choose which target company/board network to draw
-            /*if(data.targets!=null){
-                var targets = data.targets;
-                for(var i=0; i<targets.length){
-                    var well = "<div id=\"well" + i +"\" class=\"well\">";
-                    well += targets[i].
-                    $('#d3-container').append("<div id=\"well" + i +"\" class=\"well\"></div>");
-                    $('#well'+i).append
-                }
-                return;
-            }*/
             
             // initialize svg object
             svg = d3.select("#d3-container")
@@ -203,9 +214,25 @@
                     .append("svg:path")
                         .attr("d", "M0,-5L10,0L0,5")
                         .attr("fill", "rgba(32,140,153,1)");
-            // initialize company infomations 
+            // initialize other views
             $('#infopanel').css("height", height);
+            $('#d3-container').bind("DOMMouseScroll mousewheel", function(e){
+                e.preventDefault();
 
+                if(e.originalEvent.wheelDelta < 0) {
+                    zoom_out();
+                }else{
+                    zoom_in();
+                }
+            });
+            $('#zoom-btn-group').find('button').on('click', function(e){
+                e.preventDefault();
+                if($(this).attr("id")=="zoom-out"){
+                    zoom_out();
+                }else if($(this).attr("id")=="zoom-in"){
+                    zoom_in();
+                }
+            });
        
             g_nodes = data.nodes;
             //g_links = links_post;
@@ -217,7 +244,7 @@
 
             force.nodes(g_nodes).links(g_links)
                 .charge(-600)
-                .linkDistance(200)
+                .linkDistance(link_len)
                 .size([width, height])
                 .start();
         

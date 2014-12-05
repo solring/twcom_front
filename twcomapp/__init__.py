@@ -120,7 +120,7 @@ def show_company_byid(cid):
     q = u"公司編號 %s" % cid
     
     title = u"公司關係圖"
-    explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別"
+    explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度表示投資金額大小。"
     info = {"topic":title, "explain":explain}
     return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
 
@@ -134,7 +134,7 @@ def show_company_byboss(boss):
     url = "http://dataing.pw/com?boss=%s&maxlvl=%s" % (boss, maxlvl)
     q = u"董事長姓名 %s" % boss
     title = u"公司關係圖"
-    explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別"
+    explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度表示投資金額大小。"
     info = {"topic":title, "explain":explain}
     return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
 
@@ -161,7 +161,7 @@ def show_boardnet_byboard(cid):
     url = "http://dataing.pw/com?comboss=%s&maxlvl=%s" % (cid, maxlvl)
     q = u"公司編號 %s" % cid
     title = u"子母公司及共同董事關係圖"
-    explain = u"有直接投資關係的公司。顏色表示有無和查詢的公司有共同董事(同顏色表示有)"
+    explain = u"有直接投資關係的公司。顏色表示有無和查詢的公司有共同董事(同顏色表示有)。連線寬度表示投資金額大小。"
     info = {"topic":title, "explain":explain}
     
     return render_template('graph.html', graph="companyboard", query=q, url=url, graphinfo=info)
