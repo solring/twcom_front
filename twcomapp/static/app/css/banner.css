@@ -22,5 +22,9 @@
   text-shadow: 2px 2px 5px rgba(100, 0, 100, 0.7);
 }
 .info {
-  overflow: scroll;
+  overflow: auto;
+}
+
+.graph-container{
+  overflow: auto;
 }
