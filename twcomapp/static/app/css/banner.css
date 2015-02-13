@@ -27,4 +27,5 @@
 
 .graph-container{
   overflow: auto;
+  padding-top: 80px;
 }
