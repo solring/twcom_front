@@ -1,0 +1,33 @@
+{% if method == 'GET' %}
+    {% extends "layout.html" %}
+{% endif %}
+{% block content %}
+
+<div class="graph-container"><div class="row">
+    <div class="col-md-3 sidebar" id="infopanel" >
+        <div id="basicinfo">
+            <h3>搜尋結果</h3>
+            <h3>{{query}}</h3> 
+        </div>
+        <div id="nodeinfo"></div>
+    </div>
+
+    <div id="d3-container" class="col-md-9">
+        <div class="btn-group-vertical" role="group">
+        {% for k, v in targets.iteritems() %}
+            <button class="btn btn-default" onclick="window.location.href='/{{graph}}/id/{{k}}'">
+                <p>名下公司：</p>
+                {% for name in v %}
+                    {{id}}<br>
+                    {{name}}<br>
+                {% endfor %}
+            </button>
+        {% endfor %}
+        </div>    
+    </div>
+</div></div>
+<div style="visibility: hidden;" id="restapi">{{url}}</div>
+
+
+{% endblock %}
+

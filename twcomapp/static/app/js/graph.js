@@ -162,7 +162,6 @@
                 links.attr("d", linkArc);
                 nodes.attr("cx", function(d) { return d.x; })
                         .attr("cy", function(d) { return d.y; });
-
                 texts.attr("x", function(d) { return d.x  })
                         .attr("y", function(d) { return d.y  });
               }); //end force.on("tick") 
@@ -218,7 +217,7 @@
             $('#infopanel').css("height", height);
             $('#d3-container').bind("DOMMouseScroll mousewheel", function(e){
                 e.preventDefault();
-
+                
                 if(e.originalEvent.wheelDelta < 0) {
                     zoom_out();
                 }else{
@@ -235,7 +234,6 @@
             });
        
             g_nodes = data.nodes;
-            //g_links = links_post;
             g_links = data.links;
 
 
