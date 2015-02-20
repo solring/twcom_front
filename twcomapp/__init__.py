@@ -71,13 +71,12 @@ def search_companynet():
 
         # search by company name
         results = getidlike(query)
-        q = u"公司名稱 %s" % query
 
         if len(results) == 1:
             return redirect("%s/id/%s" % (graph, results.keys()[0]))
         print "graph=%s" % graph 
         
-        return  render_template('company-list.html', method=request.method, graph=graph, query=q, targets=results, querytype='id')
+        return  render_template('company-list.html', method=request.method, graph=graph, query=query, targets=results, querytype='id')
         #return json.dumps({"content": tmpl})
         #ids = results.keys()
         #if len(ids) > 1:
@@ -89,9 +88,8 @@ def search_companynet():
     elif option == "boss":
         results = getbosslike(query)
         print results
-        q = u"董事長姓名 %s" % query
 
-        return render_template('boss-list.html', method=request.method, graph=graph, query=q, targets=results, querytype='boss')
+        return render_template('boss-list.html', method=request.method, graph=graph, query=query, targets=results, querytype='boss')
         
     else:
         return redirect("/")
@@ -122,6 +120,37 @@ def getJson():
 
 
 # --- internal APIs ---
+@app.route("/company/<cid>", methods=['GET'])
+def show_company(cid):
+    print '/company/%s' % cid
+    maxlvl = '1'
+    if 'maxlvl' in request.args:
+        maxlvl = request.args['maxlvl']
+    
+    url = "http://dataing.pw/com?id=%s&maxlvl=%s" % (cid, maxlvl)
+    q = u"公司編號 %s" % cid
+    
+    title = u"公司投資關係圖"
+    explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度表示董事席次多寡。"
+    info = {"topic":title, "explain":explain}
+    return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
+
+
+    
+@app.route("/board/<boss>/<bid>", methods=['GET'])
+def show_board(boss, bid):
+    print '/board/%s/%s' % (boss, bid)
+    
+    url = "http://dataing.pw/com?boss=%s&target=%s" % (boss, bid)
+    q = u"董事長姓名 %s" % boss
+    title = u"公司關係圖"
+    explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度表示董事席次多寡。"
+    info = {"topic":title, "explain":explain}
+    return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
+    
+
+# --- old ----
+
 @app.route("/company/id/<cid>", methods=['GET'])
 def show_company_byid(cid):
     print 'company/id/%s' % cid
@@ -129,23 +158,22 @@ def show_company_byid(cid):
     if 'maxlvl' in request.args:
         maxlvl = request.args['maxlvl']
     
-    print 'test'
     url = "http://dataing.pw/com?id=%s&maxlvl=%s" % (cid, maxlvl)
     q = u"公司編號 %s" % cid
     
-    title = u"公司關係圖"
+    title = u"公司投資關係圖"
     explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度表示投資金額大小。"
     info = {"topic":title, "explain":explain}
     return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
 
 
-@app.route("/company/boss/<boss>")
-def show_company_byboss(boss):
+@app.route("/company/boss/<boss>/<bid>")
+def show_company_byboss(boss, bid):
     if 'maxlvl' in request.args:
         maxlvl = request.args['maxlvl']
     else:
         maxlvl = '1'
-    url = "http://dataing.pw/com?boss=%s&maxlvl=%s" % (boss, maxlvl)
+    url = "http://dataing.pw/com?boss=%s&target=%s&maxlvl=%s" % (boss, bid, maxlvl)
     q = u"董事長姓名 %s" % boss
     title = u"公司關係圖"
     explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度表示投資金額大小。"

@@ -40,19 +40,6 @@ var changeSearchOpt = function(){
     return false;
 };
 
-var changeGraph = function(){
-    p = $(this).parent();
-    p.parent().children('li').removeClass("active");
-    p.addClass("active");
-    
-    var id = $(this).attr("id");
-    console.log("changeGraph: caller = " + id);
-   
-    $('#graphopt').attr("value", id);
-
-    return false;
-};
-
 //not used now
 var ajaxSearch = function(event){
        event.preventDefault();
@@ -90,10 +77,8 @@ $('document').ready(function(){
           </div>
           <div class="collapse navbar-collapse" id="main-menu-collapse">
             <ul class="nav navbar-nav" id="graph-nav">
-              <li class="active"><a id="company" href="#" onclick="changeGraph.call(this);">公司投資<br>關係網路</a></li>
-              <li><a id="board" href="#" onclick="changeGraph.call(this);">董監事<br>網路</a></li>
-              <li><a id="companyaddr" href="#" onclick="changeGraph.call(this);">公司網路<br> by 地址</a></li>
-              <li><a id="companyboard" href="#" onclick="changeGraph.call(this);">公司&<br>董監事網路</a></li>
+              <li class="active"><a id="company" href="#">公司投資與董監事網路</a></li>
+              <li class="disabled"><a id="board" href="#">搜尋排行榜</a></li>
             </ul>
 
             <!-- Search button and field -->

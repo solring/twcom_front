@@ -6,19 +6,21 @@
 <div class="graph-container"><div class="row">
     <div class="col-md-3 sidebar" id="infopanel" >
         <div id="basicinfo">
-            <h3>搜尋結果</h3>
-            <h3>{{query}}</h3> 
+            <h1>搜尋結果</h1>
+            <hr>
+            <h2>公司姓名或統編:</h2> 
+            <h2>{{query}}</h2> 
         </div>
         <div id="nodeinfo"></div>
     </div>
 
     <div id="d3-container" class="col-md-9">
-        <div class="btn-group-vertical" role="group">
+        <div class="list-group">
         {% for k, v in targets.iteritems() %}
-            <button class="btn btn-default" onclick="window.location.href='/{{graph}}/id/{{k}}'">
+            <a class="list-group-item" href="/company/{{k}}">
                 <p>統一編號：{{k}}</p>
                 公司名稱：{{v}}
-            </button>
+            </a>
         {% endfor %}
         </div>    
     </div>
