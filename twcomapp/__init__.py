@@ -25,6 +25,11 @@ def getbosslike(query):
     if res!="null":
         return json.loads(res.json())
 
+def getbossfromid(query):
+    res = requests.get("http://dataing.pw/query?board=%s" % query)
+    if res!="null":
+        return json.loads(res.json())		
+
 def to_node(d):
     return {"id": d["id"],
             "name": d["name"],
@@ -122,7 +127,12 @@ def show_company_byid(cid):
     title = u"公司關係圖"
     explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度表示投資金額大小。"
     info = {"topic":title, "explain":explain}
-    return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
+    bossresults = getbossfromid(cid)
+    bosslist = [];
+    for boss in bossresults:
+    	bosslist.append(boss['name'])
+    return render_template('test.html', graph="company", cid=cid, query=q, url=url, name='TempName', bosslist=bosslist, graphinfo=info)
+
 
 
 @app.route("/company/boss/<boss>")
@@ -150,7 +160,12 @@ def show_addrnet_byid(cid):
     title = u"公司關係圖-同地址"
     explain = u"地址相同的公司。"
     info = {"topic":title, "explain":explain}
-    return render_template('graph.html', graph="companyaddr", query=q, url=url, graphinfo=info)
+    bossresults = getbossfromid(cid)
+    bosslist = [];
+    for boss in bossresults:
+    	bosslist.append(boss['name'])
+    return render_template('test.html', graph="companyaddr", cid=cid, query=q, url=url, name='TempName', bosslist=bosslist, graphinfo=info)
+
 
 @app.route("/companyboard/id/<cid>")
 def show_boardnet_byboard(cid):
@@ -163,8 +178,11 @@ def show_boardnet_byboard(cid):
     title = u"子母公司及共同董事關係圖"
     explain = u"有直接投資關係的公司。顏色表示有無和查詢的公司有共同董事(同顏色表示有)。連線寬度表示投資金額大小。"
     info = {"topic":title, "explain":explain}
-    
-    return render_template('graph.html', graph="companyboard", query=q, url=url, graphinfo=info)
+    bossresults = getbossfromid(cid)
+    bosslist = [];
+    for boss in bossresults:
+    	bosslist.append(boss['name'])
+    return render_template('test.html', graph="companyboard", cid=cid, query=q, url=url, name='TempName', bosslist=bosslist, graphinfo=info)
 
 
 @app.route("/board/id/<cid>")
@@ -178,5 +196,14 @@ def show_boardnet_byid(cid):
     title = u"公司董事關係圖"
     explain = u"有共同公司的董事。顏色表示經過betweenness centrality分類後的類別"
     info = {"topic":title, "explain":explain}
-    return render_template('graph.html', graph="board", query=q, url=url, graphinfo=info)
+    bossresults = getbossfromid(cid)
+    bosslist = [];
+    for boss in bossresults:
+    	bosslist.append(boss['name'])
+    return render_template('test.html', graph="board", cid=cid, query=q, url=url, name='TempName', bosslist=bosslist, graphinfo=info)
 
+@app.route("/test")
+def test_page():
+	return render_template('test.html')
+	
+	

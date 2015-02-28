@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<script src="{{ url_for('static', filename='lib/js/d3.v3.min.js') }}" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='app/js/test.js') }}" charset="utf-8"></script>
+<script>
+
+var switchGraph = function(){
+    p = $(this).parent();
+    p.parent().children('li').removeClass("active");
+    p.addClass("active");
+    
+    var id = $(this).attr("id");
+    console.log("switchGraph: caller = " + id);
+    $('#graphopt').attr("value", id);
+	
+	//return window.location = 'http://twcom-analysis.herokuapp.com/' + id + '/id/' + $('#bosslist').text();
+	return window.location = 'http://127.0.0.1:5000/' + id + '/id/' + $('#cid').text();
+};
+</script>
+
+
+<div class="graph-container"><div class="row">
+    <div class="col-md-3 col-sm-3 sidebar" id="infopanel" >
+        <h2>{{name}}</h2> 
+        <hr>
+        
+        <h3>董監事列表</h3>
+		<div id="bossinfo"></div>
+        <hr>
+        <div id="basicinfo"></div>
+        
+        <h3>圖片說明</h3>
+		<p>{{graphinfo.explain}}</p>
+        <hr>
+		<h3>節點資料</h3>
+        <div id="nodeinfo" class="info"></div>
+    </div>
+
+	<nav id="navtab" class="navbar navbar-default col-md-9">
+		<ul class="nav nav-tabs">
+			<li><a id="company" href="#" onclick="switchGraph.call(this);">公司投資<br>關係網路</a></li>
+			<li><a id="companyaddr" href="#" onclick="switchGraph.call(this);">公司網路<br> by 地址</a></li>
+			<li><a id="companyboard" href="#" onclick="switchGraph.call(this);">公司&<br>董監事網路</a></li>  
+			<div id="zoom-btn-group" class="btn-group">
+				<button class="btn btn-default" id="zoom-in"><i class="fa fa-search-plus fa-2x"></i></button> 
+				<button class="btn btn-default" id="zoom-out"><i class="fa fa-search-minus fa-2x"></i></button> 
+			</div>
+			<div class="col-md-9">
+				<div id="d3-container">
+				</div>
+			</div>
+		</ul>
+	</nav>
+	
+</div></div>
+<div style="visibility: hidden;" id="restapi">{{url}}</div>
+<div style="visibility: hidden;" id="graphtype">{{graph}}</div>
+<div style="visibility: hidden;" id="bosslist">{{bosslist}}</div>
+<div style="visibility: hidden;" id="cid">{{cid}}</div>
+{% endblock %}
+
+
