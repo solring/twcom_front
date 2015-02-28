@@ -22,6 +22,7 @@ var changeSearchOpt = function(){
         option.text("By Company ")
             .append("<span class=\"caret\"></span>");
         $("#searchopt").attr("value", "company");
+        $("#graphopt").attr("value", "company")
         $("#searchquery").attr("placeholder", "請輸入公司名稱或統一號碼");
 
     }else if(id=="byBoss"){
@@ -29,31 +30,12 @@ var changeSearchOpt = function(){
         option.text("By Boss ")
             .append("<span class=\"caret\"></span>");
         $("#searchopt").attr("value", "boss");
+        $("#graphopt").attr("value", "board")
         $("#searchquery").attr("placeholder", "請輸入董監事人名");
 
-    }else if(id=="byAddr"){
-
-        option.text("By Address ")
-            .append("<span class=\"caret\"></span>");
-        $("#searchopt").attr("value", "addr");
-        $("#searchquery").attr("placeholder", "請輸入公司名稱或統一號碼");
-    }
+    }    
     return false;
 };
-/*
-var changeGraph = function(){
-    p = $(this).parent();
-    p.parent().children('li').removeClass("active");
-    p.addClass("active");
-    
-    var id = $(this).attr("id");
-    console.log("changeGraph: caller = " + id);
-   
-    $('#graphopt').attr("value", id);
-
-    return false;
-};
-*/
 
 //not used now
 var ajaxSearch = function(event){
@@ -116,7 +98,7 @@ $('document').ready(function(){
                     </div><!-- /btn-group -->
                     <input id="searchquery" type="text" name="query" class="form-control" placeholder="請輸入公司名稱或統一號碼">
                     <input type="hidden" name="searchopt" id="searchopt" value="company" /> 
-                    <input type="hidden" name="graphopt" id="graphopt" value="board" />
+                    <input type="hidden" name="graphopt" id="graphopt" value="company" />
                 </div></div><!-- /input-group /form-group -->
                     <button type="submit" class="btn btn-default">Search</button>
             </form>

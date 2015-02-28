@@ -22,10 +22,16 @@
   text-shadow: 2px 2px 5px rgba(100, 0, 100, 0.7);
 }
 .info {
-  overflow: auto;
+  overflow: scroll;
 }
-
-.graph-container{
-  overflow: auto;
-  padding-top: 80px;
+.info h1,
+.info h2,
+.info h3 {
+  color: #511789;
+}
+.graph-container {
+  padding: 80px;
+}
+#searchquery {
+  width: 200px;
 }

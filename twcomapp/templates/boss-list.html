@@ -14,19 +14,18 @@
 
     <div id="d3-container" class="col-md-9">
         <div class="btn-group-vertical" role="group">
-        {% for k, v in targets.iteritems() %}
-            <button class="btn btn-default" onclick="window.location.href='/{{graph}}/id/{{k}}'">
+        {% for item in targets %}
+            <button class="btn btn-default" onclick="window.location.href='/board/id/{{item['_id']}}/{{item['name']}}'">
+                <p>姓名：{{item['name']}}</p>
                 <p>名下公司：</p>
-                {% for name in v %}
-                    {{id}}<br>
-                    {{name}}<br>
+                {% for c in item['coms'] %}
+                    {{c}}<br>
                 {% endfor %}
             </button>
         {% endfor %}
         </div>    
     </div>
 </div></div>
-<div style="visibility: hidden;" id="restapi">{{url}}</div>
 
 
 {% endblock %}

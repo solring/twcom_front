@@ -2,21 +2,22 @@
 {% block content %}
 
 <script src="{{ url_for('static', filename='lib/js/d3.v3.min.js') }}" charset="utf-8"></script>
-<script src="{{ url_for('static', filename='app/js/test.js') }}" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='app/js/graph.js') }}" charset="utf-8"></script>
 <script>
-
+/*
 var switchGraph = function(){
     p = $(this).parent();
     p.parent().children('li').removeClass("active");
     p.addClass("active");
     
-    var id = $(this).attr("id");
-    console.log("switchGraph: caller = " + id);
-    $('#graphopt').attr("value", id);
+    var graphtype = $(this).attr("id");
+    console.log("switchGraph: caller = " + graphtype);
+    $('#graphopt').attr("value", graphtype);
 	
-	//return window.location = 'http://twcom-analysis.herokuapp.com/' + id + '/id/' + $('#bosslist').text();
-	return window.location = 'http://127.0.0.1:5000/' + id + '/id/' + $('#cid').text();
+	//return window.location = 'http://twcom-analysis.herokuapp.com/' + graphtype + '/id/' + $('#bosslist').text();
+	return window.location = '/' + graphtype + '/id/' + $('#cid').text();
 };
+*/
 </script>
 
 
@@ -25,24 +26,42 @@ var switchGraph = function(){
         <h2>{{name}}</h2> 
         <hr>
         
+	{% if query_by == 'company' %}
         <h3>董監事列表</h3>
-		<div id="bossinfo"></div>
+	{% elif query_by == 'boss' %}
+        <h3>名下持有公司</h3>
+	{% endif %}
+
+        <div id="bossinfo">
+        {% for boss in bosslist %}
+            <a href="/board/id/{{boss['id']}}/{{boss['name']}}">
+                {{boss['name']}}
+            </a><br>
+        {% endfor %}
+        </div>
         <hr>
-        <div id="basicinfo"></div>
         
         <h3>圖片說明</h3>
-		<p>{{graphinfo.explain}}</p>
+        <div id="graphinfo"></div>
+        <div id="basicinfo"></div>
         <hr>
-		<h3>節點資料</h3>
+		
+        <h3>節點資料</h3>
         <div id="nodeinfo" class="info"></div>
     </div>
 
 	<nav id="navtab" class="navbar navbar-default col-md-9">
 		<ul class="nav nav-tabs">
-			<li><a id="company" href="#" onclick="switchGraph.call(this);">公司投資<br>關係網路</a></li>
-			<li><a id="companyaddr" href="#" onclick="switchGraph.call(this);">公司網路<br> by 地址</a></li>
-			<li><a id="companyboard" href="#" onclick="switchGraph.call(this);">公司&<br>董監事網路</a></li>  
-			<div id="zoom-btn-group" class="btn-group">
+			{% if query_by == 'company' %}
+            <li class='active'><a id="company" class="graph-tab" href="#">公司投資<br>關係網路</a></li>
+			<li><a id="companyaddr" class="graph-tab" href="#">公司網路<br> by 地址</a></li>
+			<li><a id="companyboard" class="graph-tab" href="#">公司&<br>董監事網路</a></li>  
+			<li><a id="board" class="graph-tab" href="#">公司&<br>董監事網路</a></li>  
+			{% elif query_by == 'boss' %}
+			<li class='active'><a id="company-by-boss" class="graph-tab" href="#">持有之公司網路</a></li>
+            <li class='disable'><a id="boss-relation" class="graph-tab" href="#">董監事關係</a></li>
+            {% endif %}
+            <div id="zoom-btn-group" class="btn-group">
 				<button class="btn btn-default" id="zoom-in"><i class="fa fa-search-plus fa-2x"></i></button> 
 				<button class="btn btn-default" id="zoom-out"><i class="fa fa-search-minus fa-2x"></i></button> 
 			</div>
@@ -56,7 +75,6 @@ var switchGraph = function(){
 </div></div>
 <div style="visibility: hidden;" id="restapi">{{url}}</div>
 <div style="visibility: hidden;" id="graphtype">{{graph}}</div>
-<div style="visibility: hidden;" id="bosslist">{{bosslist}}</div>
 <div style="visibility: hidden;" id="cid">{{cid}}</div>
 {% endblock %}
 

@@ -15,7 +15,7 @@
     <div id="d3-container" class="col-md-9">
         <div class="btn-group-vertical" role="group">
         {% for k, v in targets.iteritems() %}
-            <button class="btn btn-default" onclick="window.location.href='/{{graph}}/id/{{k}}'">
+            <button class="btn btn-default" onclick="window.location.href='/company/id/{{k}}/{{v}}'">
                 <p>統一編號：{{k}}</p>
                 公司名稱：{{v}}
             </button>
@@ -23,6 +23,5 @@
         </div>    
     </div>
 </div></div>
-<div style="visibility: hidden;" id="restapi">{{url}}</div>
 
 {% endblock %}
