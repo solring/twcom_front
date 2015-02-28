@@ -41,14 +41,15 @@ def mainpage():
     return render_template('index.html')
 
 
+
 # --- search function ---
-@app.route("/search", methods=['POST'])
+@app.route("/search", methods=['POST', 'GET'])
 def search_companynet():
     print "in search"
     option = query = ''
 
+    # get form arguments
     if request.method == 'POST':
-        
         try:
             if request.form is not None:
                 option = request.form.getlist('searchopt')[0]
@@ -58,41 +59,51 @@ def search_companynet():
                 return "Error: form empty"
         except:
             return "Error: unable to get the form"
+     
+    elif request.method == 'GET':
+        try:
+            option = request.args['searchopt']
+            query = request.args['query']
+            graph = request.args['graphopt']
+        except:
+            return "Error: arguments miss"
+
+    # search
+    if option == "company":
+        # search by company id
+        if re.match("^[\d]{8}$", query)!=None:
+            return redirect("%s/id/%s" % (graph, query))
+
+        # search by company name
+        results = getidlike(query)
+        q = u"公司名稱 %s" % query
+
+        if len(results) == 1:
+            return redirect("%s/id/%s" % (graph, results.keys()[0]))
+        print "graph=%s" % graph 
         
-        if option == "company":
-            # search by company id
-            if re.match("^[\d]{8}$", query)!=None:
-                return redirect("%s/id/%s" % (graph, query))
+        return  render_template('company-list.html', method=request.method, graph=graph, query=q, targets=results, querytype='id')
+        #return json.dumps({"content": tmpl})
+        #ids = results.keys()
+        #if len(ids) > 1:
+        #    print "redirect to /company/id/%s" % ids[0]
+        #    return redirect("company/id/%s" % ids[0])
+        #else:
+        #    return "Company not found!"
 
-            # search by company name
-            results = getidlike(query)
-            q = u"公司名稱 %s" % query
+    elif option == "boss":
+        results = getbosslike(query)
+        print results
+        q = u"董事長姓名 %s" % query
 
-            if len(results) == 1:
-                return redirect("%s/id/%s" % (graph, results.keys()[0]))
-            print "graph=%s" % graph 
-            return  render_template('list.html', graph=graph, query=q, targets=results, querytype='id')
-            #return json.dumps({"content": tmpl})
-            #ids = results.keys()
-            #if len(ids) > 1:
-            #    print "redirect to /company/id/%s" % ids[0]
-            #    return redirect("company/id/%s" % ids[0])
-            #else:
-            #    return "Company not found!"
-
-        elif option == "boss":
-            results = getbosslike(query)
-            print results
-            q = u"董事長姓名 %s" % query
-
-            return render_template('list.html', graph=graph, query=q, targets=results, querytype='boss')
-            #return redirect("company/boss/%s" % query)
-
-
+        return render_template('boss-list.html', method=request.method, graph=graph, query=q, targets=results, querytype='boss')
+        
     else:
         return redirect("/")
 
-# --- for Cross-Origin Resources Sharing ---
+
+
+# --- for Cross-Origin Resources Sharing (server-side access control) ---
 @app.route("/getjson", methods=['GET'])
 def getJson():
     print "in getjson" 
@@ -111,6 +122,9 @@ def getJson():
 #    G = get_network(cid, maxlvl=1)
 #    if G:
 #        return exp_company(G, "%s.cache" % cid)
+
+
+
 
 # --- internal APIs ---
 @app.route("/company/id/<cid>", methods=['GET'])
@@ -196,14 +210,19 @@ def show_boardnet_byid(cid):
     title = u"公司董事關係圖"
     explain = u"有共同公司的董事。顏色表示經過betweenness centrality分類後的類別"
     info = {"topic":title, "explain":explain}
+
     bossresults = getbossfromid(cid)
     bosslist = [];
     for boss in bossresults:
     	bosslist.append(boss['name'])
     return render_template('test.html', graph="board", cid=cid, query=q, url=url, name='TempName', bosslist=bosslist, graphinfo=info)
 
+
+    #bossinfo = getbosslike(query)
+    #print bossinfo
+
+    #return render_template('boss-graph.html', graph="board", query=q, url=url, graphinfo=info)
+
 @app.route("/test")
 def test_page():
 	return render_template('test.html')
-	
-	

@@ -1,6 +1,8 @@
+{% if method == 'GET' %}
+    {% extends "layout.html" %}
+{% endif %}
+{% block content %}
 
-<div style="height: 80px; width: auto; background-color: white">
-</div>
 <div class="graph-container"><div class="row">
     <div class="col-md-3 sidebar" id="infopanel" >
         <div id="basicinfo">
@@ -14,14 +16,8 @@
         <div class="btn-group-vertical" role="group">
         {% for k, v in targets.iteritems() %}
             <button class="btn btn-default" onclick="window.location.href='/{{graph}}/id/{{k}}'">
-                <p>{{k}}</p>
-                {% if querytype=='boss'%}
-                    {% for name in v %}
-                     {{name}}<br>
-                    {% endfor %}
-                {% else %}
-                {{v}}
-                {% endif %}
+                <p>統一編號：{{k}}</p>
+                公司名稱：{{v}}
             </button>
         {% endfor %}
         </div>    
@@ -29,4 +25,4 @@
 </div></div>
 <div style="visibility: hidden;" id="restapi">{{url}}</div>
 
-
+{% endblock %}

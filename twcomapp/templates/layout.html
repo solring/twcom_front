@@ -54,11 +54,11 @@ var changeGraph = function(){
     return false;
 };
 */
-$('document').ready(function(){
-    $('#searchform').submit(function(event){
+
+//not used now
+var ajaxSearch = function(event){
        event.preventDefault();
 
-       console.log("tttt");
        var url = "/search";
        $.ajax({
             type: "POST",
@@ -71,11 +71,13 @@ $('document').ready(function(){
             error: function(err){
                 console.log(err);
             }           
-       });
-    });
-
+        });
+};
+/*
+$('document').ready(function(){
+    $('#searchform').submit(ajaxSearch);
 });
-
+*/
 </script>
 
 </head>
@@ -99,7 +101,7 @@ $('document').ready(function(){
 			-->
 
             <!-- Search button and field -->
-            <form id="searchform" class="navbar-form navbar-left" action="/" method="post" role="search">
+            <form id="searchform" class="navbar-form navbar-left" action="/search" method="get" role="search">
                 <div class="form-group"><div class="input-group">
 
                     <div class="input-group-btn">
