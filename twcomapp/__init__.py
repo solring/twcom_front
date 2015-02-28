@@ -25,6 +25,11 @@ def getbosslike(query):
     if res!="null":
         return json.loads(res.json())
 
+def getbossfromid(query):
+    res = requests.get("http://dataing.pw/query?board=%s" % query)
+    if res!="null":
+        return json.loads(res.json())		
+
 def to_node(d):
     return {"id": d["id"],
             "name": d["name"],
@@ -76,7 +81,7 @@ def search_companynet():
             return redirect("%s/id/%s" % (graph, results.keys()[0]))
         print "graph=%s" % graph 
         
-        return  render_template('company-list.html', method=request.method, graph=graph, query=query, targets=results, querytype='id')
+        return  render_template('company-list.html', method=request.method, graph=graph, query=q, targets=results, querytype='id')
         #return json.dumps({"content": tmpl})
         #ids = results.keys()
         #if len(ids) > 1:
@@ -89,7 +94,8 @@ def search_companynet():
         results = getbosslike(query)
         print results
 
-        return render_template('boss-list.html', method=request.method, graph=graph, query=query, targets=results, querytype='boss')
+
+        return render_template('boss-list.html', method=request.method, graph=graph, query=q, targets=results, querytype='boss')
         
     else:
         return redirect("/")
@@ -120,51 +126,20 @@ def getJson():
 
 
 # --- internal APIs ---
-@app.route("/company/<cid>", methods=['GET'])
-def show_company(cid):
-    print '/company/%s' % cid
-    maxlvl = '1'
-    if 'maxlvl' in request.args:
-        maxlvl = request.args['maxlvl']
-    
-    url = "http://dataing.pw/com?id=%s&maxlvl=%s" % (cid, maxlvl)
-    q = u"公司編號 %s" % cid
-    
-    title = u"公司投資關係圖"
-    explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度表示董事席次多寡。"
-    info = {"topic":title, "explain":explain}
-    return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
-
-
-    
-@app.route("/board/<boss>/<bid>", methods=['GET'])
-def show_board(boss, bid):
-    print '/board/%s/%s' % (boss, bid)
-    
-    url = "http://dataing.pw/com?boss=%s&target=%s" % (boss, bid)
-    q = u"董事長姓名 %s" % boss
-    title = u"公司關係圖"
-    explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度表示董事席次多寡。"
-    info = {"topic":title, "explain":explain}
-    return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
-    
-
-# --- old ----
-
-@app.route("/company/id/<cid>", methods=['GET'])
-def show_company_byid(cid):
+#default entry of company serach
+@app.route("/company/id/<cid>/<name>", methods=['GET'])
+def show_company_byid(cid, name):
     print 'company/id/%s' % cid
     maxlvl = '1'
     if 'maxlvl' in request.args:
         maxlvl = request.args['maxlvl']
     
-    url = "http://dataing.pw/com?id=%s&maxlvl=%s" % (cid, maxlvl)
-    q = u"公司編號 %s" % cid
-    
-    title = u"公司投資關係圖"
-    explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度表示投資金額大小。"
-    info = {"topic":title, "explain":explain}
-    return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
+    bossresults = getbossfromid(cid)
+    bosslist = [];
+    for boss in bossresults:
+    	bosslist.append({"id": boss['_id'], "name": boss['name']})
+    return render_template('test.html', query_by="company", graph="company", cid=cid, name=name, bosslist=bosslist)
+
 
 
 @app.route("/company/boss/<boss>/<bid>")
@@ -173,12 +148,13 @@ def show_company_byboss(boss, bid):
         maxlvl = request.args['maxlvl']
     else:
         maxlvl = '1'
-    url = "http://dataing.pw/com?boss=%s&target=%s&maxlvl=%s" % (boss, bid, maxlvl)
-    q = u"董事長姓名 %s" % boss
+    url = "http://dataing.pw/com?boss=%s&maxlvl=%s" % (boss, maxlvl)
+    q = u"董事姓名 %s" % boss
     title = u"公司關係圖"
-    explain = u"有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度表示投資金額大小。"
+    explain = u"有掛名董事的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度共同董事席次數。"
     info = {"topic":title, "explain":explain}
-    return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
+    #return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
+    return render_template('test.html', graph="company", cid=cid, query=q, url=url, name='TempName', bosslist=bosslist, graphinfo=info)
 
 
 @app.route("/companyaddr/id/<cid>")
@@ -192,7 +168,12 @@ def show_addrnet_byid(cid):
     title = u"公司關係圖-同地址"
     explain = u"地址相同的公司。"
     info = {"topic":title, "explain":explain}
-    return render_template('graph.html', graph="companyaddr", query=q, url=url, graphinfo=info)
+    bossresults = getbossfromid(cid)
+    bosslist = [];
+    for boss in bossresults:
+    	bosslist.append(boss['name'])
+    return render_template('test.html', graph="companyaddr", cid=cid, query=q, url=url, name='TempName', bosslist=bosslist, graphinfo=info)
+
 
 @app.route("/companyboard/id/<cid>")
 def show_boardnet_byboard(cid):
@@ -205,24 +186,30 @@ def show_boardnet_byboard(cid):
     title = u"子母公司及共同董事關係圖"
     explain = u"有直接投資關係的公司。顏色表示有無和查詢的公司有共同董事(同顏色表示有)。連線寬度表示投資金額大小。"
     info = {"topic":title, "explain":explain}
-    
-    return render_template('graph.html', graph="companyboard", query=q, url=url, graphinfo=info)
+    bossresults = getbossfromid(cid)
+    bosslist = [];
+    for boss in bossresults:
+    	bosslist.append(boss['name'])
+    return render_template('test.html', graph="companyboard", cid=cid, query=q, url=url, name='TempName', bosslist=bosslist, graphinfo=info)
 
 
-@app.route("/board/id/<cid>")
-def show_boardnet_byid(cid):
+#default entry of boss serach
+@app.route("/board/id/<bid>/<name>")
+def show_boardnet_byid(bid, name):
     if 'maxlvl' in request.args:
         maxlvl = request.args['maxlvl']
     else:
         maxlvl = '1'
-    url = "http://dataing.pw/boss?id=%s&maxlvl=%s" %(cid, maxlvl)
-    q = u"公司編號 %s" % cid
-    title = u"公司董事關係圖"
-    explain = u"有共同公司的董事。顏色表示經過betweenness centrality分類後的類別"
-    info = {"topic":title, "explain":explain}
+    bosslist = [{"id": 12, "name": "dummy"}]
 
-    bossinfo = getbosslike(query)
-    print bossinfo
+    return render_template('test.html', query_by="boss", graph="company-by-boss", cid=bid, name=name, bosslist=bosslist)
 
-    return render_template('boss-graph.html', graph="board", query=q, url=url, graphinfo=info)
 
+    #bossinfo = getbosslike(query)
+    #print bossinfo
+
+    #return render_template('boss-graph.html', graph="board", query=q, url=url, graphinfo=info)
+
+@app.route("/test")
+def test_page():
+	return render_template('test.html')

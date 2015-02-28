@@ -6,31 +6,26 @@
 <div class="graph-container"><div class="row">
     <div class="col-md-3 sidebar" id="infopanel" >
         <div id="basicinfo">
-            <h1>搜尋結果</h1>
-            <hr>
-            <h2>董監事姓名：</h2> 
-            <h2>{{query}}</h2> 
-            <p>如有同名的情況請根據名下公司選擇欲查看的董監事</p>
-
+            <h3>搜尋結果</h3>
+            <h3>{{query}}</h3> 
         </div>
         <div id="nodeinfo"></div>
     </div>
 
     <div id="d3-container" class="col-md-9">
-        <div class="list-group">
-        {% for k, v in targets.iteritems() %}
-            <a class="list-group-item" href="/board/{{query}}/{{k}}">
-                <p>{{query}}({{k}})名下公司：</p>
-                {% for name in v %}
-                    {{name}}<br>
+        <div class="btn-group-vertical" role="group">
+        {% for item in targets %}
+            <button class="btn btn-default" onclick="window.location.href='/board/id/{{item['_id']}}/{{item['name']}}'">
+                <p>姓名：{{item['name']}}</p>
+                <p>名下公司：</p>
+                {% for c in item['coms'] %}
+                    {{c}}<br>
                 {% endfor %}
-            </a>
+            </button>
         {% endfor %}
         </div>    
     </div>
 </div></div>
-<div style="visibility: hidden;" id="restapi">{{url}}</div>
-
 
 {% endblock %}
 
