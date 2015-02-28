@@ -81,7 +81,7 @@ def search_companynet():
             return redirect("%s/id/%s" % (graph, results.keys()[0]))
         print "graph=%s" % graph 
         
-        return  render_template('company-list.html', method=request.method, graph=graph, query=q, targets=results, querytype='id')
+        return  render_template('company-list.html', method=request.method, graph=graph, query=query, targets=results, querytype='id')
         #return json.dumps({"content": tmpl})
         #ids = results.keys()
         #if len(ids) > 1:
@@ -95,7 +95,7 @@ def search_companynet():
         print results
 
 
-        return render_template('boss-list.html', method=request.method, graph=graph, query=q, targets=results, querytype='boss')
+        return render_template('boss-list.html', method=request.method, graph=graph, query=query, targets=results, querytype='boss')
         
     else:
         return redirect("/")
