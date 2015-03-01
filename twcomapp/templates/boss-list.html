@@ -13,15 +13,15 @@
     </div>
 
     <div id="d3-container" class="col-md-9">
-        <div class="btn-group-vertical" role="group">
+        <div class="list-group">
         {% for item in targets %}
-            <button class="btn btn-default" onclick="window.location.href='/board/id/{{item['_id']}}/{{item['name']}}'">
+            <a class="list-group-item" href="/board/id/{{item['_id']}}/{{item['name']}}">
                 <p>姓名：{{item['name']}}</p>
                 <p>名下公司：</p>
                 {% for c in item['coms'] %}
                     {{c}}<br>
                 {% endfor %}
-            </button>
+            </a>
         {% endfor %}
         </div>    
     </div>
