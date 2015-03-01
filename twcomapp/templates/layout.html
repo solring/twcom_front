@@ -40,25 +40,12 @@ var changeSearchOpt = function(){
     }
     return false;
 };
-/*
-var changeGraph = function(){
-    p = $(this).parent();
-    p.parent().children('li').removeClass("active");
-    p.addClass("active");
-    
-    var id = $(this).attr("id");
-    console.log("changeGraph: caller = " + id);
-   
-    $('#graphopt').attr("value", id);
 
-    return false;
-};
-*/
-$('document').ready(function(){
-    $('#searchform').submit(function(event){
+//not used now
+var ajaxSearch = function(event){
+
        event.preventDefault();
 
-       console.log("tttt");
        var url = "/search";
        $.ajax({
             type: "POST",
@@ -71,11 +58,13 @@ $('document').ready(function(){
             error: function(err){
                 console.log(err);
             }           
-       });
-    });
-
+        });
+};
+/*
+$('document').ready(function(){
+    $('#searchform').submit(ajaxSearch);
 });
-
+*/
 </script>
 
 </head>
@@ -91,15 +80,13 @@ $('document').ready(function(){
           <div class="collapse navbar-collapse" id="main-menu-collapse">
 			<!--
             <ul class="nav navbar-nav" id="graph-nav">
-              <li class="active"><a id="company" href="#" onclick="changeGraph.call(this);">公司投資<br>關係網路</a></li>
-              <li><a id="board" href="#" onclick="changeGraph.call(this);">董監事<br>網路</a></li>
-              <li><a id="companyaddr" href="#" onclick="changeGraph.call(this);">公司網路<br> by 地址</a></li>
-              <li><a id="companyboard" href="#" onclick="changeGraph.call(this);">公司&<br>董監事網路</a></li>
+              <li class="active"><a id="company" href="#">公司投資與董監事網路</a></li>
+              <li class="disabled"><a id="board" href="#">搜尋排行榜</a></li>
             </ul>
 			-->
 
             <!-- Search button and field -->
-            <form id="searchform" class="navbar-form navbar-left" action="/" method="post" role="search">
+            <form id="searchform" class="navbar-form navbar-left" action="/search" method="get" role="search">
                 <div class="form-group"><div class="input-group">
 
                     <div class="input-group-btn">
