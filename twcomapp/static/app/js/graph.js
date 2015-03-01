@@ -8,6 +8,79 @@
     var svg = undefined;
     var cid = "0";
     var scale = 1;
+    var graph_hash = {
+        "company": "com?id",
+        "companyaddr" : "com?comaddr",
+        "companyboard" : "com?comboss",
+        "company-by-boss" : "com?target",
+        "board" : "boss?id"
+    };
+    var graph_info = {
+        "company": "有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度共同董事席次數。(大小目前不表示資本額)",
+        "companyaddr": "地址相同的公司。",
+        "companyboard": "有直接投資關係的公司。顏色表示有無和查詢的公司有共同董事(同顏色表示有)。連線寬度表示投資金額大小。",
+        "company-by-boss": "該董事名下的公司關係圖。連線寬度表示共同席次數",
+        "board": "該公司的董事關係圖。有連線表示兩名董事有共同公司。大小表示頭銜數。"
+    };
+    
+    var switchGraph = function(){
+        //switch tab
+        var p = $(this).parent();
+        p.parent().children('li').removeClass("active");
+        p.addClass("active");
+        
+        var graphtype = $(this).attr("id");
+        console.log("switchGraph: caller = " + graphtype);
+        $('#graphopt').attr("value", graphtype);
+
+        //update explaination
+        $('#graphinfo').empty().append("<p>" + graph_info[graphtype] + "</p>")
+
+        restapi = "http://dataing.pw/" + graph_hash[graphtype] + "=" + cid + "&maxlvl=1";
+        console.log("switchGraph: restapi = " + restapi);
+        $.getJSON("/getjson?api="+ encodeURIComponent(restapi) , json_update_callback); //end get JSON 
+        //return window.location = 'http://twcom-analysis.herokuapp.com/' + graphtype + '/id/' + $('#bosslist').text();
+        //return window.location = '/' + graphtype + '/id/' + $('#cid').text();
+    };
+
+    var update_links = function(){
+                 svg.selectAll('.link').attr("x1", function(d) {
+		  	        var deltaX = d.target.x - d.source.x,
+		  		        deltaY = d.target.y - d.source.y,
+		  		        dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
+		  		        normX = deltaX / dist,
+		  		        //targetPadding = Math.sqrt(d.target.size) * circle_size ;
+		  		        targetPadding = d.target.size ;
+			        return d.target.x - (targetPadding * normX) * scale;
+		        })
+                .attr("y1", function(d) { 
+                    var deltaX = d.target.x - d.source.x,
+                        deltaY = d.target.y - d.source.y,
+                        dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
+                        normY = deltaY / dist,
+                        //targetPadding = Math.sqrt(d.target.size) * circle_size ;
+                        targetPadding = d.target.size;
+                    return d.target.y - (targetPadding * normY) * scale;
+                })
+                .attr("x2", function(d) { 
+                    var deltaX = d.target.x - d.source.x,
+                        deltaY = d.target.y - d.source.y,
+                        dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
+                        normX = deltaX / dist,
+                        //sourcePadding = Math.sqrt(d.source.size) * circle_size +10;
+                        sourcePadding = d.source.size +10;
+                    return d.source.x + (sourcePadding * normX)* scale; 
+                })
+                .attr("y2", function(d) { 
+                    var deltaX = d.target.x - d.source.x,
+                        deltaY = d.target.y - d.source.y,
+                        dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
+                        normY = deltaY / dist,
+                        //sourcePadding = Math.sqrt(d.source.size) * circle_size +10;
+                        sourcePadding = d.source.size+10;
+                    return d.source.y + (sourcePadding * normY)* scale;
+                });
+    };
     
     var zoom_out= function(){
             if(scale>1){
@@ -16,7 +89,8 @@
                     return d.size * scale;
                 });
                 force.linkDistance(link_len * scale).start();
-                svg.selectAll(".link").attr("d", linkArc);
+                //svg.selectAll(".link").attr("d", linkArc);
+                update_links();
             }
     };
     var zoom_in= function(){
@@ -26,7 +100,8 @@
                     return d.size * scale;
                 });
                 force.linkDistance(link_len * scale).start();
-                svg.selectAll(".link").attr("d", linkArc);
+                //svg.selectAll(".link").attr("d", linkArc);
+                update_links();
             }
     };
 
@@ -55,54 +130,30 @@
             ty;
     };
 
-	var build_links = function(nodes, links){
-		var d3_links = [];
-
-        //in d3.js, nodes are indexed by it's array index, and links must use them to indicate a link
-        
-        //NOTE: This function might be a performance bottleneck ( O(n^2) ) yet to optimize
-        var find_index_of_id = function(nds, id) {
-            for (var i = 0; i < nds.length; i++) {
-                if (nds[i].id == id) return i;                 
-            }
-            return -1;  
-        }
-
-		for(var i=0; i<links.length; i++){
-            var tmp = {
-                "source" : find_index_of_id(nodes, links[i].src.id),
-                "target" : find_index_of_id(nodes, links[i].dst.id)
-            };
-			d3_links.push(tmp);
-		}
-		return d3_links;
-	};
-
+	//set active tab
+	if($(location).attr('href').match('companyaddr')){
+		$('#companyaddr').addClass('active');
+	}else if($(location).attr('href').match('companyboard')){
+		$('#companyboard').addClass('active');
+	}else{
+		$('#company').addClass('active');
+	}
+	
     var update = function(){
         console.log("in update");
-        var links = svg.selectAll(".link")
-                    .data(g_links);
-                    
-        links.enter().append("path")
-                        .attr("class", "link")
-                        .attr("marker-end", "url(#path-arrow)")
-                        .style("stroke-width", function(d){ return d.width })
-                        .style("fill", "none")
-                        .style("stroke", "gray");
-
-                        
-        //links.exit().remove();
-    
+   
+        //update notes
         var nodes = svg.selectAll(".node")
                     .data(g_nodes, key=function(n){ return n.name; });
     
-        nodes.enter().append("circle")
+		nodes.enter().append("circle")
                         .attr("class", "node")
                         .call(force.drag)
                         .attr("r", function(n){ return n.size })
                         .style("fill", function(n){ return color(n.group) })
                         .on("mouseover", function(n){
-                            var info = n.tooltip.replace(/\n/g, "<br> ");
+                            var info = n.tooltip;
+                            //$("#nodeinfo").empty().append(info).append('</a>');
                             $("#nodeinfo").empty().append(info);
                         })
                      .append("title")
@@ -110,133 +161,66 @@
                         .attr("x", function(n){ return n.x })
                         .attr("y", function(n){ return n.y });
 
+        nodes.exit().remove();
+        
         var texts = svg.selectAll("text.node")
-                        .data(g_nodes)
-                    .enter().append("text")
+                        .data(g_nodes);
+
+        texts.enter().append("text")
                         .attr("class", "node")
                         .attr("text-anchor" ,"middle")
                         .attr("font-size", 12 + "px")
                         .style("color", "black")
                         .text(function(d) { return d.name });
-    
-        //nodes.exit().remove();
-         force.on("tick", function() {
-         /*
-                links.attr("x1", function(d) {
-		  	        var deltaX = d.target.x - d.source.x,
-		  		        deltaY = d.target.y - d.source.y,
-		  		        dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
-		  		        normX = deltaX / dist,
-//		  		        targetPadding = Math.sqrt(d.target.size) * circle_size ;
-		  		        targetPadding = d.target.size ;
-			        return d.target.x - (targetPadding * normX);
-		        })
-                .attr("y1", function(d) { 
-                    var deltaX = d.target.x - d.source.x,
-                        deltaY = d.target.y - d.source.y,
-                        dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
-                        normY = deltaY / dist,
-                        //targetPadding = Math.sqrt(d.target.size) * circle_size ;
-                        targetPadding = d.target.size;
-                    return d.target.y - (targetPadding * normY);
-                })
-                .attr("x2", function(d) { 
-                    var deltaX = d.target.x - d.source.x,
-                        deltaY = d.target.y - d.source.y,
-                        dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
-                        normX = deltaX / dist,
-                        //sourcePadding = Math.sqrt(d.source.size) * circle_size +10;
-                        sourcePadding = d.source.size +10;
-                    return d.source.x + (sourcePadding * normX); 
-                })
-                .attr("y2", function(d) { 
-                    var deltaX = d.target.x - d.source.x,
-                        deltaY = d.target.y - d.source.y,
-                        dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
-                        normY = deltaY / dist,
-                        //sourcePadding = Math.sqrt(d.source.size) * circle_size +10;
-                        sourcePadding = d.source.size+10;
-                    return d.source.y + (sourcePadding * normY);
-                });
-           */
-                links.attr("d", linkArc);
+        texts.exit().remove() 
+
+        //update links
+        var links = svg.selectAll(".link")
+                    .data(g_links);
+                    
+        links.enter().append("line")
+                        .attr("class", "link")
+                        .attr("marker-end", "url(#path-arrow)")
+                        .style("stroke-width", function(d){ return d.width })
+                        .style("fill", "none")
+                        .style("stroke", "rgba(55,55,55, 0.3)");
+                        
+        links.exit().remove();
+ 
+        var update_partial = function() {
+                update_links();
+                //links.attr("d", linkArc);
                 nodes.attr("cx", function(d) { return d.x; })
                         .attr("cy", function(d) { return d.y; });
                 texts.attr("x", function(d) { return d.x  })
                         .attr("y", function(d) { return d.y  });
-              }); //end force.on("tick") 
+        };
+        //update_partial();
+
+        force.on("tick", update_partial); //end force.on("tick") 
     };
-    
-    $('document').ready(function(){
-        height = window.innerHeight;
-        
-        //updata navbar
-        var navs = $('#graph-nav').children().removeClass('active');
-        var graphtype = $('#graphtype').text();
-        console.log("graph type: "+graphtype)
-        $("#"+graphtype).parent().addClass('active');
 
-        // get target company number for query
-        cid = $('#cid').text();
-        restapi = $('#restapi').text();
-        console.log("getting "+ cid + "from "+ restapi + "......" + encodeURIComponent(restapi) + " 4");
-
-        // get json through API
-        $.getJSON("/getjson?api="+ encodeURIComponent(restapi) , function(data){
+    var json_update_callback = function(data){
         
             // if error, show error msgs
             if(data.error!=null){
                 console.log("error:" + data.error);
-                $('#d3-container').append("<div class=\"alert alert-danger\">" + data.error +"</div>");
+                $('#d3-container').empty().append("<div class=\"alert alert-danger\">" + data.error +"</div>");
                 return;
             }
 
             
-            // initialize svg object
-            svg = d3.select("#d3-container")
-                    .append("svg")
-                        .attr("width", width)
-                        .attr("height", height);
-
-            svg.append("defs").selectAll("marker")
-                   .data(["arrow"])
-                .enter()
-                    .append("marker")
-                        .attr("id", "path-arrow")
-                        .attr("viewBox", "0 -5 10 10")
-                        .attr("markerUnits", "userSpaceOnUse")
-                        .attr("refX", 0)
-                        .attr("refY", 0)
-                        .attr("markerWidth", 8)
-                        .attr("markerHeight", 15)
-                        .attr("orient", "auto")
-                    .append("svg:path")
-                        .attr("d", "M0,-5L10,0L0,5")
-                        .attr("fill", "rgba(32,140,153,1)");
-            // initialize other views
-            $('#infopanel').css("height", height);
-            $('#d3-container').bind("DOMMouseScroll mousewheel", function(e){
-                e.preventDefault();
-                
-                if(e.originalEvent.wheelDelta < 0) {
-                    zoom_out();
-                }else{
-                    zoom_in();
-                }
-            });
-            $('#zoom-btn-group').find('button').on('click', function(e){
-                e.preventDefault();
-                if($(this).attr("id")=="zoom-out"){
-                    zoom_out();
-                }else if($(this).attr("id")=="zoom-in"){
-                    zoom_in();
-                }
-            });
-       
             g_nodes = data.nodes;
             g_links = data.links;
-
-
+			//var bossarray = $('#bosslist').text().replace("[u'","").replace("']","").split("', u'");
+			//var bosslink = '';
+			//for(i=0;i<bossarray.length;i++){
+				//bosslink += '<a href="/company/boss/';
+				//bosslink += encodeURIComponent(bossarray[i]);
+				//bosslink += '">'+ bossarray[i] + '</a><br>';
+			//}
+			//$('#bossinfo').append(bosslink);
+            $('#basicinfo').empty()
             $('#basicinfo').append("<p>Number of nodes: " + g_nodes.length + "</p>" );
             $('#basicinfo').append("<p>Number of links: " + g_links.length + "</p>" );
 
@@ -248,8 +232,74 @@
         
             update(); 
             
-                  
-        }); //end get JSON 
+        };
+    $('document').ready(function(){
+        height = window.innerHeight;
+        
+        //updata navbar
+//        var navs = $('#graph-nav').children().removeClass('active');
+//       var graphtype = $('#graphtype').text();
+//        console.log("graph type: "+graphtype)
+//        $("#"+graphtype).parent().addClass('active');
+        
+        // initialize svg object
+        svg = d3.select("#d3-container")
+                .append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
+
+        svg.append("defs").selectAll("marker")
+               .data(["arrow"])
+            .enter()
+                .append("marker")
+                    .attr("id", "path-arrow")
+                    .attr("viewBox", "0 -5 10 10")
+                    .attr("markerUnits", "userSpaceOnUse")
+                    .attr("refX", 0)
+                    .attr("refY", 0)
+                    .attr("markerWidth", 8)
+                    .attr("markerHeight", 15)
+                    .attr("orient", "auto")
+                .append("svg:path")
+                    .attr("d", "M0,-5L10,0L0,5")
+                    .attr("fill", "rgba(32,140,153,1)");
+        // initialize other views
+        $('#infopanel').css("height", height);
+        $('#d3-container').bind("DOMMouseScroll mousewheel", function(e){
+            e.preventDefault();
+
+            if(e.originalEvent.wheelDelta < 0) {
+                zoom_out();
+            }else{
+                zoom_in();
+            }
+        });
+        $('#zoom-btn-group').find('button').on('click', function(e){
+            e.preventDefault();
+            if($(this).attr("id")=="zoom-out"){
+                zoom_out();
+            }else if($(this).attr("id")=="zoom-in"){
+                zoom_in();
+            }
+        });
+        $('.graph-tab').on('click', switchGraph);
+   
+
+        // get target company number for query
+        cid = $('#cid').text();
+        graphtype = $('#graphtype').text()
+        $('#graphinfo').empty().append("<p>" + graph_info[graphtype] + "</p>")
+        
+        //restapi = $('#restapi').text();
+        console.log("graph type: " + graphtype)
+        
+        // get json through API
+        restapi = "http://dataing.pw/" + graph_hash[graphtype]+ "=" + cid;
+        if(graphtype!="company-by-boss") restapi = restapi + "&maxlvl=1";
+
+        console.log("getting "+ cid + "from "+ restapi + "......" + encodeURIComponent(restapi) + " 4");
+        $.getJSON("/getjson?api="+ encodeURIComponent(restapi) , json_update_callback); //end get JSON 
+
     }); //end document ready
     
 })(jQuery);
