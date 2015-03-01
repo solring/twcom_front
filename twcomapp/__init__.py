@@ -137,7 +137,7 @@ def show_company_byid(cid, name):
     bossresults = getbossfromid(cid)
     bosslist = [];
     for boss in bossresults:
-    	bosslist.append({"id": boss['_id'], "name": boss['name']})
+    	bosslist.append({"id": boss['id'], "name": boss['name']})
     return render_template('test.html', query_by="company", graph="company", cid=cid, name=name, bosslist=bosslist)
 
 

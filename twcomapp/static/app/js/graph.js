@@ -152,7 +152,7 @@
                         .attr("r", function(n){ return n.size })
                         .style("fill", function(n){ return color(n.group) })
                         .on("mouseover", function(n){
-                            //var info = n.tooltip.replace(/\n/g, "<br><a href='/company/id/[company id]'>");
+                            var info = n.tooltip;
                             //$("#nodeinfo").empty().append(info).append('</a>');
                             $("#nodeinfo").empty().append(info);
                         })
@@ -205,7 +205,7 @@
             // if error, show error msgs
             if(data.error!=null){
                 console.log("error:" + data.error);
-                $('#d3-container').append("<div class=\"alert alert-danger\">" + data.error +"</div>");
+                $('#d3-container').empty().append("<div class=\"alert alert-danger\">" + data.error +"</div>");
                 return;
             }
 
@@ -295,7 +295,7 @@
         
         // get json through API
         restapi = "http://dataing.pw/" + graph_hash[graphtype]+ "=" + cid;
-        if(graphtype!="company-by-boss") restapi += "&maxlvl=1";
+        if(graphtype!="company-by-boss") restapi = restapi + "&maxlvl=1";
 
         console.log("getting "+ cid + "from "+ restapi + "......" + encodeURIComponent(restapi) + " 4");
         $.getJSON("/getjson?api="+ encodeURIComponent(restapi) , json_update_callback); //end get JSON 
