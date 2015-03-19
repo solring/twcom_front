@@ -6,6 +6,7 @@
     var g_nodes = force.nodes();
     var g_links = force.links();
     var svg = undefined;
+    var zoom = undefined;
     var cid = "0";
     var scale = 1;
     var graph_hash = {
@@ -81,9 +82,9 @@
                     return d.source.y + (sourcePadding * normY)* scale;
                 });
     };
-    
+/*    
     var zoom_out= function(){
-            var scale = d3.event.scale;
+            var scale = zoom.scale();
             if(scale>1){
                 scale -= 0.2;
                 svg.selectAll("circle").attr("r", function(d) {
@@ -95,7 +96,7 @@
             }
     };
     var zoom_in= function(){
-            var scale = d3.event.scale;
+            var scale = zoom.scale();
             if(scale<10){
                 scale += 0.2;
                 svg.selectAll("circle").attr("r", function(d) {
@@ -106,7 +107,6 @@
                 update_links();
             }
     };
-
     var linkArc = function(d) {
         var dx = d.target.x - d.source.x,
             dy = d.target.y - d.source.y,
@@ -131,6 +131,7 @@
             tx + "," + 
             ty;
     };
+*/
 
     var on_zoom = function(){
         console.log("on_zoom, scale = " + d3.event.scale)
@@ -248,13 +249,15 @@
 //        console.log("graph type: "+graphtype)
 //        $("#"+graphtype).parent().addClass('active');
         
+        zoom = d3.behavior.zoom();
+        
         // initialize svg object
         svg = d3.select("#d3-container")
                 .append("svg")
                     .attr("width", width)
                     .attr("height", height)
                 .append("g")
-                    .call(d3.behavior.zoom().scaleExtent([1, 10]).on("zoom", on_zoom));
+                    .call(zoom.scaleExtent([1, 10]).on("zoom", on_zoom));
 
         svg.append("defs").selectAll("marker")
                .data(["arrow"])
@@ -283,7 +286,6 @@
                 zoom_in();
             }
         });
-        */
         $('#zoom-btn-group').find('button').on('click', function(e){
             e.preventDefault();
             if($(this).attr("id")=="zoom-out"){
@@ -292,6 +294,7 @@
                 zoom_in();
             }
         });
+        */
         $('.graph-tab').on('click', switchGraph);
    
 

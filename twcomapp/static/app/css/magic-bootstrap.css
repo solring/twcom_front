@@ -3454,7 +3454,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav > li > a:hover,
 .nav > li > a:focus {
   text-decoration: none;
-  background-color: rgba(23, 204, 161, 0.5);
+  background-color: rgba(23, 204, 161, 0.2);
 }
 .nav > li.disabled > a {
   color: #999999;
@@ -3469,7 +3469,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav .open > a,
 .nav .open > a:hover,
 .nav .open > a:focus {
-  background-color: rgba(23, 204, 161, 0.5);
+  background-color: rgba(23, 204, 161, 0.2);
   border-color: #17cca1;
 }
 .nav .nav-divider {
@@ -3495,7 +3495,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   border-radius: 4px 4px 0 0;
 }
 .nav-tabs > li > a:hover {
-  border-color: #eeeeee #eeeeee #dddddd;
+  border-color: #ffffff #ffffff #dddddd;
 }
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
@@ -4601,7 +4601,7 @@ a.thumbnail.active {
   padding: 10px 15px;
   margin-bottom: -1px;
   background-color: #ffffff;
-  border: 1px solid #17cca1;
+  border: 1px solid rgba(23, 204, 161, 0.5);
 }
 .list-group-item:first-child {
   border-top-right-radius: 4px;
@@ -5287,8 +5287,7 @@ button.close {
   text-align: left;
   background-color: #ffffff;
   background-clip: padding-box;
-  border: 1px solid rgba(23, 204, 161, 0.75);
-  border: 1px solid #17cca1;
+  border: 1px solid rgba(23, 204, 161, 0.5);
   border-radius: 6px;
   -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
