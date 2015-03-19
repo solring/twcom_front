@@ -72,13 +72,13 @@ def search_companynet():
     if option == "company":
         # search by company id
         if re.match("^[\d]{8}$", query)!=None:
-            return redirect("%s/id/%s" % (graph, query))
+            return redirect("%s/id/%s/%s" % (graph, query, query))
 
         # search by company name
         results = getidlike(query)
 
         if len(results) == 1:
-            return redirect("%s/id/%s" % (graph, results.keys()[0]))
+            return redirect("%s/id/%s/%s" % (graph, results.keys()[0], results.values()[0] ) )
         print "graph=%s" % graph 
         
         return  render_template('company-list.html', method=request.method, graph=graph, query=query, targets=results, querytype='id')
@@ -139,58 +139,6 @@ def show_company_byid(cid, name):
     for boss in bossresults:
     	bosslist.append({"id": boss['id'], "name": boss['name']})
     return render_template('test.html', query_by="company", graph="company", cid=cid, name=name, bosslist=bosslist)
-
-
-
-@app.route("/company/boss/<boss>/<bid>")
-def show_company_byboss(boss, bid):
-    if 'maxlvl' in request.args:
-        maxlvl = request.args['maxlvl']
-    else:
-        maxlvl = '1'
-    url = "http://dataing.pw/com?boss=%s&maxlvl=%s" % (boss, maxlvl)
-    q = u"董事姓名 %s" % boss
-    title = u"公司關係圖"
-    explain = u"有掛名董事的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度共同董事席次數。"
-    info = {"topic":title, "explain":explain}
-    #return render_template('graph.html', graph="company", query=q, url=url, graphinfo=info)
-    return render_template('test.html', graph="company", cid=cid, query=q, url=url, name='TempName', bosslist=bosslist, graphinfo=info)
-
-
-@app.route("/companyaddr/id/<cid>")
-def show_addrnet_byid(cid):
-    if 'maxlvl' in request.args:
-        maxlvl = request.args['maxlvl']
-    else:
-        maxlvl = '1'
-    url = "http://dataing.pw/com?comaddr=%s&maxlvl=%s" % (cid, maxlvl)
-    q = u"公司編號 %s" % cid
-    title = u"公司關係圖-同地址"
-    explain = u"地址相同的公司。"
-    info = {"topic":title, "explain":explain}
-    bossresults = getbossfromid(cid)
-    bosslist = [];
-    for boss in bossresults:
-    	bosslist.append(boss['name'])
-    return render_template('test.html', graph="companyaddr", cid=cid, query=q, url=url, name='TempName', bosslist=bosslist, graphinfo=info)
-
-
-@app.route("/companyboard/id/<cid>")
-def show_boardnet_byboard(cid):
-    if 'maxlvl' in request.args:
-        maxlvl = request.args['maxlvl']
-    else:
-        maxlvl = '1'
-    url = "http://dataing.pw/com?comboss=%s&maxlvl=%s" % (cid, maxlvl)
-    q = u"公司編號 %s" % cid
-    title = u"子母公司及共同董事關係圖"
-    explain = u"有直接投資關係的公司。顏色表示有無和查詢的公司有共同董事(同顏色表示有)。連線寬度表示投資金額大小。"
-    info = {"topic":title, "explain":explain}
-    bossresults = getbossfromid(cid)
-    bosslist = [];
-    for boss in bossresults:
-    	bosslist.append(boss['name'])
-    return render_template('test.html', graph="companyboard", cid=cid, query=q, url=url, name='TempName', bosslist=bosslist, graphinfo=info)
 
 
 #default entry of boss serach

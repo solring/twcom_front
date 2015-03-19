@@ -83,6 +83,7 @@
     };
     
     var zoom_out= function(){
+            var scale = d3.event.scale;
             if(scale>1){
                 scale -= 0.2;
                 svg.selectAll("circle").attr("r", function(d) {
@@ -94,6 +95,7 @@
             }
     };
     var zoom_in= function(){
+            var scale = d3.event.scale;
             if(scale<10){
                 scale += 0.2;
                 svg.selectAll("circle").attr("r", function(d) {
@@ -128,6 +130,11 @@
             dr + "," + dr + " 0 0,1 " + 
             tx + "," + 
             ty;
+    };
+
+    var on_zoom = function(){
+        console.log("on_zoom, scale = " + d3.event.scale)
+        svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"); 
     };
 
 	//set active tab
@@ -172,7 +179,7 @@
                         .attr("font-size", 12 + "px")
                         .style("color", "black")
                         .text(function(d) { return d.name });
-        texts.exit().remove() 
+        texts.exit().remove(); 
 
         //update links
         var links = svg.selectAll(".link")
@@ -208,8 +215,7 @@
                 $('#d3-container').empty().append("<div class=\"alert alert-danger\">" + data.error +"</div>");
                 return;
             }
-
-            
+         
             g_nodes = data.nodes;
             g_links = data.links;
 			//var bossarray = $('#bosslist').text().replace("[u'","").replace("']","").split("', u'");
@@ -246,7 +252,9 @@
         svg = d3.select("#d3-container")
                 .append("svg")
                     .attr("width", width)
-                    .attr("height", height);
+                    .attr("height", height)
+                .append("g")
+                    .call(d3.behavior.zoom().scaleExtent([1, 10]).on("zoom", on_zoom));
 
         svg.append("defs").selectAll("marker")
                .data(["arrow"])
@@ -264,6 +272,7 @@
                     .attr("d", "M0,-5L10,0L0,5")
                     .attr("fill", "rgba(32,140,153,1)");
         // initialize other views
+        /*
         $('#infopanel').css("height", height);
         $('#d3-container').bind("DOMMouseScroll mousewheel", function(e){
             e.preventDefault();
@@ -274,6 +283,7 @@
                 zoom_in();
             }
         });
+        */
         $('#zoom-btn-group').find('button').on('click', function(e){
             e.preventDefault();
             if($(this).attr("id")=="zoom-out"){
@@ -291,7 +301,6 @@
         $('#graphinfo').empty().append("<p>" + graph_info[graphtype] + "</p>")
         
         //restapi = $('#restapi').text();
-        console.log("graph type: " + graphtype)
         
         // get json through API
         restapi = "http://dataing.pw/" + graph_hash[graphtype]+ "=" + cid;
