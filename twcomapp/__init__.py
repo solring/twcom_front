@@ -72,14 +72,13 @@ def search_companynet():
     if option == "company":
         # search by company id
         if re.match("^[\d]{8}$", query)!=None:
-            return redirect("%s/id/%s/%s" % (graph, query, query))
+            return redirect("%s/id/%s" % (graph, query))
 
         # search by company name
         results = getidlike(query)
 
         if len(results) == 1:
-            return redirect("%s/id/%s/%s" % (graph, results.keys()[0], results.values()[0] ) )
-        print "graph=%s" % graph 
+            return redirect("%s/id/%s" % (graph, results.keys()[0]))
         
         return  render_template('company-list.html', method=request.method, graph=graph, query=query, targets=results, querytype='id')
         #return json.dumps({"content": tmpl})
@@ -92,8 +91,6 @@ def search_companynet():
 
     elif option == "boss":
         results = getbosslike(query)
-        print results
-
 
         return render_template('boss-list.html', method=request.method, graph=graph, query=query, targets=results, querytype='boss')
         
@@ -127,17 +124,24 @@ def getJson():
 
 # --- internal APIs ---
 #default entry of company serach
-@app.route("/company/id/<cid>/<name>", methods=['GET'])
-def show_company_byid(cid, name):
+@app.route("/company/id/<cid>", methods=['GET'])
+def show_company_byid(cid):
     print 'company/id/%s' % cid
     maxlvl = '1'
     if 'maxlvl' in request.args:
         maxlvl = request.args['maxlvl']
     
-    bossresults = getbossfromid(cid)
-    bosslist = [];
-    for boss in bossresults:
-    	bosslist.append({"id": boss['id'], "name": boss['name']})
+    name = ""
+    bosslist = []
+    
+    res = getbossfromid(cid)
+    if 'name' in res:
+        name = res['name']
+    if 'boards' in res:
+        bossresults = res['boards']
+        for boss in bossresults:
+    	    bosslist.append({"id": boss['target'], "name": boss['name']})
+
     return render_template('test.html', query_by="company", graph="company", cid=cid, name=name, bosslist=bosslist)
 
 
