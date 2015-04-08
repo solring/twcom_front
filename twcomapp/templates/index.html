@@ -19,18 +19,28 @@
 <div class="col-lg-4">
 <h2>搜尋方法</h2>
 <hr>
-<p>by Company: 可ㄧ輸入公司統一編號，公司名稱</p>
-<p>by Boss: 董事長姓名搜尋</p>
+<h3>搜尋公司（By Company）</h3>
+<div class="input-group">
+    <div class="input-group-btn">
+         <button id="searchopt-text" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">By Company <span class="caret"></span></button>
+    </div><!-- /btn-group -->
+    <input id="searchquery" type="text" name="query" class="form-control" placeholder="請輸入公司名稱或統一號碼">
+</div>
+<p>可ㄧ輸入公司統一編號，公司名稱搜尋</p>
+<h3>搜尋董監事（By Boss）</h3>
+<div class="input-group">
+    <div class="input-group-btn">
+         <button id="searchopt-text" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">By Boss <span class="caret"></span></button>
+    </div><!-- /btn-group -->
+    <input id="searchquery" type="text" name="query" class="form-control" placeholder="請輸入董監事人名">
+</div>
+<p>可輸入姓名搜尋公司董監事</p>
 
 </div>    
 <div class="col-lg-4">
 <h2>直接使用route</h2>
 <hr>
 <p>/company/id/[company id]</p>
-<p>/company/boss/[董監事姓名]</p>
-<p>/board/id/[company id]</p>
-<p>/companyaddr/id/[company id]</p>
-<p>/companyboard/id/[company id]</p>
 
 </div>    
 </div>    
