@@ -84,21 +84,23 @@ $('document').ready(function(){
             <form id="searchform" class="navbar-form navbar-left" action="/search" method="get" role="search">
                 <div class="form-group"><div class="input-group">
 
-                    <div class="input-group-btn">
-                        <button id="searchopt-text" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            By Company 
-                            <span class="caret"></span>
-                         </button>
+                    <span class="input-group-btn">
+                            <button id="searchopt-text" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                By Company 
+                                <span class="caret"></span>
+                            </button>
                          <ul id="search-dropdown" class="dropdown-menu" role="menu">
                              <li><a id="byCom" href="#" onclick="changeSearchOpt.call(this);">By Company</a></li>
                              <li><a id="byBoss" href="#" onclick="changeSearchOpt.call(this);">By Boss</a></li>
                          </ul>
-                    </div><!-- /btn-group -->
+                    </span><!-- /btn-group -->
                     <input id="searchquery" type="text" name="query" class="form-control" placeholder="請輸入公司名稱或統一號碼">
                     <input type="hidden" name="searchopt" id="searchopt" value="company" /> 
                     <input type="hidden" name="graphopt" id="graphopt" value="company" />
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default">Search</button>
+                    </span>
                 </div></div><!-- /input-group /form-group -->
-                    <button type="submit" class="btn btn-default">Search</button>
             </form>
 
             <ul class="nav navbar-nav navbar-right">

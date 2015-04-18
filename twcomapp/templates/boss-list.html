@@ -18,7 +18,7 @@
             <a class="list-group-item" href="/board/id/{{item['_id']}}/{{item['name']}}">
                 <p>姓名：{{item['name']}}</p>
                 <p>名下公司：</p>
-                {% for c in item['coms'] %}
+                {% for c in item['orgs'] %}
                     {{c}}<br>
                 {% endfor %}
             </a>

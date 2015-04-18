@@ -191,7 +191,13 @@
                         .attr("marker-end", "url(#path-arrow)")
                         .style("stroke-width", function(d){ return d.width })
                         .style("fill", "none")
-                        .style("stroke", "rgba(55,55,55, 0.3)");
+                        .style("stroke", function(d){
+                            if(d.ivst==1){
+                                return "rgba(255, 0, 0, 0.5)";
+                            }else if(d.ivst==0){
+                                return "rgba(0, 0, 255, 0.5)";
+                            }
+                        });
                         
         links.exit().remove();
  
@@ -211,7 +217,7 @@
     var json_update_callback = function(data){
         
             // if error, show error msgs
-            if(data.error!=null){
+            if(!data.nodes){
                 console.log("error:" + data.error);
                 $('#d3-container').empty().append("<div class=\"alert alert-danger\">" + data.error +"</div>");
                 return;
