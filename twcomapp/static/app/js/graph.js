@@ -159,15 +159,17 @@
                         .call(force.drag)
                         .attr("r", function(n){ return n.size })
                         .style("fill", function(n){ return color(n.group) })
-                        .on("mouseover", function(n){
-                            var info = n.tooltip;
-                            //$("#nodeinfo").empty().append(info).append('</a>');
-                            $("#nodeinfo").empty().append(info);
-                        })
-                     .append("title")
-                        .text(function(n){ return n.tooltip })
-                        .attr("x", function(n){ return n.x })
-                        .attr("y", function(n){ return n.y });
+                        //.on("mouseover", function(n){
+                        //    var info = n.tooltip;
+						//	br_info = info.replace(new RegExp('\n', 'g'), '<br>');
+						//	$("#nodeinfo").empty().append(br_info);
+                        //})
+						.on("click", function(n){
+							var info = n.tooltip;
+							br_info = info.replace(new RegExp('\n', 'g'), '<br>');
+							$("#nodeinfo").empty().append(br_info);
+							$('#ModalNode').modal('show');
+						});
 
         nodes.exit().remove();
         
@@ -308,6 +310,9 @@
         cid = $('#cid').text();
         graphtype = $('#graphtype').text()
         $('#graphinfo').empty().append("<p>" + graph_info[graphtype] + "</p>")
+		$('#graphbutton').on('click', function(){
+			$('#ModalInfo').modal('show');
+		});
         
         //restapi = $('#restapi').text();
         
