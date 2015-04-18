@@ -14,14 +14,14 @@
         "companyaddr" : "com?comaddr",
         "companyboard" : "com?comboss",
         "company-by-boss" : "com?target",
-        "board" : "boss?id"
+        "board" : "boss?bossid"
     };
     var graph_info = {
-        "company": "有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度共同董事席次數。(大小目前不表示資本額)",
+        "company": "有個人或法人投資關係的公司。<br>連線寬度: 共同董事席次數<br>連線顏色: 紅-個人, 藍-法人<br>Node大小: 董監事數量",
         "companyaddr": "地址相同的公司。",
-        "companyboard": "有直接投資關係的公司。顏色表示有無和查詢的公司有共同董事(同顏色表示有)。連線寬度表示投資金額大小。",
-        "company-by-boss": "該董事名下的公司關係圖。連線寬度表示共同席次數",
-        "board": "該公司的董事關係圖。有連線表示兩名董事有共同公司。大小表示頭銜數。"
+        "companyboard": "有直接投資關係的公司。<br>Node顏色: 有無和查詢的公司有共同董事(同顏色表示有)<br>連線寬度: 共同董事席次<br>連線顏色: 紅-個人, 藍-法人",
+        "company-by-boss": "該董事名下的公司關係圖。<br>連線寬度: 共同董事席次數<br>連線顏色: 紅-個人, 藍-法人<br>Node大小: 董監事數量",
+        "board": "董事關係圖, 連線表示兩名董事有共同公司。Node大小: 該董事頭銜數。"
     };
     
     var switchGraph = function(){
