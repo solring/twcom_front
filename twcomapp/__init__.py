@@ -18,16 +18,22 @@ app.wsgi_app = ProxyFix(app.wsgi_app) # for gunicorn
 def getidlike(query):
     res = requests.get("http://dataing.pw/query?com=%s" % query)
     if res!="null":
+        print res.json()
         return json.loads(res.json())
 
 def getbosslike(query):
     res = requests.get("http://dataing.pw/query?boss=%s" % query)
     if res!="null":
+
+        print res.json()
         return json.loads(res.json())
 
 def getbossfromid(query):
     res = requests.get("http://dataing.pw/query?board=%s" % query)
     if res!="null":
+        print "------ before res.json"
+        print res.json()
+        print "------- after res.json"
         return json.loads(res.json())		
 
 def to_node(d):

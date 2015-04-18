@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
-
+<!--
 <script src="{{ url_for('static', filename='lib/js/d3.v3.min.js') }}" charset="utf-8"></script>
 <script src="{{ url_for('static', filename='app/js/graph.js') }}" charset="utf-8"></script>
+-->
 <script>
 /*
 var switchGraph = function(){
@@ -22,7 +23,9 @@ var switchGraph = function(){
 
 
 <div class="graph-container"><div class="row">
-    <div class="col-md-3 col-sm-3 sidebar" id="infopanel" >
+    
+    <!-- Left sidebar -->
+    <div class="col-md-2 col-sm-2 sidebar" id="infopanel" >
         <h2>{{name}}</h2> 
         <hr>
         
@@ -44,19 +47,10 @@ var switchGraph = function(){
             </div>
         </div>
        
-        <div class="panel panel-default">
-            <div class="panel-heading">圖片說明</div>
-            <div id="graphinfo" class="panel-body"></div>
-            <div id="basicinfo" class="panel-body"></div>
-        </div>
         
-        <div class="panel panel-default">
-            <div class="panel-heading">節點資料</div>
-            <div id="nodeinfo" class="panel-body"></div>
-        </div>
     </div>
 
-	<nav id="navtab" class="navbar navbar-default col-md-9">
+	<nav id="navtab" class="navbar navbar-default col-md-8">
 		<ul class="nav nav-tabs">
 			{% if query_by == 'company' %}
             <li class='active'><a id="company" class="graph-tab" href="#">公司投資<br>關係網路</a></li>
@@ -74,12 +68,25 @@ var switchGraph = function(){
         </div>
         -->
 		</ul>
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div id="d3-container">
             </div>
         </div>
 	</nav>
-	
+
+
+    <!-- Right sidebar -->
+    <div class="col-md-2 col-sm-2 sidebar" id="infopanel2" >
+        <div class="panel panel-default">
+            <div class="panel-heading">圖片說明</div>
+            <div id="graphinfo" class="panel-body"></div>
+            <div id="basicinfo" class="panel-body"></div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">節點資料</div>
+            <div id="nodeinfo" class="panel-body"></div>
+        </div>
+    </div>
 </div></div>
 <div style="visibility: hidden;" id="restapi">{{url}}</div>
 <div style="visibility: hidden;" id="graphtype">{{graph}}</div>
