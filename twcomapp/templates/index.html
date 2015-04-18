@@ -21,21 +21,30 @@
 <h2>搜尋方法</h2>
 <hr>
 <h3>搜尋公司（By Company）</h3>
-<div class="input-group">
-    <div class="input-group-btn">
-         <button id="searchopt-text" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">By Company <span class="caret"></span></button>
-    </div><!-- /btn-group -->
-    <input id="searchquery" type="text" name="query" class="form-control" placeholder="請輸入公司名稱或統一號碼">
-</div>
-<p>可ㄧ輸入公司統一編號，公司名稱搜尋</p>
+<form id="searchform" class="navbar-form navbar-left" action="/search" method="get" role="search">
+    <div class="input-group">
+        <div class="input-group-btn">
+             <button id="searchopt-text" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">By Company <span class="caret"></span></button>
+        </div><!-- /btn-group -->
+        <input id="searchquery" type="text" name="query" class="form-control" placeholder="請輸入公司名稱或統一號碼">
+        <input type="hidden" name="searchopt" id="searchopt" value="company" /> 
+        <input type="hidden" name="graphopt" id="graphopt" value="company" />
+    </div>
+<p>可輸入公司統一編號，公司名稱搜尋</p>
+</form>
 <h3>搜尋董監事（By Boss）</h3>
-<div class="input-group">
-    <div class="input-group-btn">
-         <button id="searchopt-text" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">By Boss <span class="caret"></span></button>
-    </div><!-- /btn-group -->
-    <input id="searchquery" type="text" name="query" class="form-control" placeholder="請輸入董監事人名">
-</div>
+<form id="searchform" class="navbar-form navbar-left" action="/search" method="get" role="search">
+    <div class="input-group">
+        <div class="input-group-btn">
+             <button id="searchopt-text" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">By Boss <span class="caret"></span></button>
+        </div><!-- /btn-group -->
+        <input id="searchquery" type="text" name="query" class="form-control" placeholder="請輸入董監事人名">
+        <input type="hidden" name="searchopt" id="searchopt" value="boss" /> 
+        <input type="hidden" name="graphopt" id="graphopt" value="board" />
+    </div>
 <p>可輸入姓名搜尋公司董監事</p>
+</form>
+
 
 </div>    
 <div class="col-lg-4">
