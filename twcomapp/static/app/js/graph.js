@@ -17,11 +17,11 @@
         "board" : "boss?id"
     };
     var graph_info = {
-        "company": "有直接投資關係的公司。顏色表示經過betweenness centrality分類後的類別。連線寬度共同董事席次數。(大小目前不表示資本額)",
+        "company": "有直接投資關係的公司。<br>顏色表示經過betweenness centrality分類後的類別。<br>連線寬度共同董事席次數。<br>(大小目前不表示資本額)",
         "companyaddr": "地址相同的公司。",
-        "companyboard": "有直接投資關係的公司。顏色表示有無和查詢的公司有共同董事(同顏色表示有)。連線寬度表示投資金額大小。",
-        "company-by-boss": "該董事名下的公司關係圖。連線寬度表示共同席次數",
-        "board": "該公司的董事關係圖。有連線表示兩名董事有共同公司。大小表示頭銜數。"
+        "companyboard": "有直接投資關係的公司。<br>顏色表示有無和查詢的公司有共同董事(同顏色表示有)。<br>連線寬度表示投資金額大小。",
+        "company-by-boss": "該董事名下的公司關係圖。<br>連線寬度表示共同席次數",
+        "board": "該公司的董事關係圖。<br>有連線表示兩名董事有共同公司。大小表示頭銜數。<br>"
     };
     
     var switchGraph = function(){
@@ -159,15 +159,17 @@
                         .call(force.drag)
                         .attr("r", function(n){ return n.size })
                         .style("fill", function(n){ return color(n.group) })
-                        .on("mouseover", function(n){
-                            var info = n.tooltip;
-                            //$("#nodeinfo").empty().append(info).append('</a>');
-                            $("#nodeinfo").empty().append(info);
-                        })
-                     .append("title")
-                        .text(function(n){ return n.tooltip })
-                        .attr("x", function(n){ return n.x })
-                        .attr("y", function(n){ return n.y });
+                        //.on("mouseover", function(n){
+                        //    var info = n.tooltip;
+						//	br_info = info.replace(new RegExp('\n', 'g'), '<br>');
+						//	$("#nodeinfo").empty().append(br_info);
+                        //})
+						.on("click", function(n){
+							var info = n.tooltip;
+							br_info = info.replace(new RegExp('\n', 'g'), '<br>');
+							$("#nodeinfo").empty().append(br_info);
+							$('#ModalNode').modal('show');
+						});
 
         nodes.exit().remove();
         
@@ -302,6 +304,9 @@
         cid = $('#cid').text();
         graphtype = $('#graphtype').text()
         $('#graphinfo').empty().append("<p>" + graph_info[graphtype] + "</p>")
+		$('#graphbutton').on('click', function(){
+			$('#ModalInfo').modal('show');
+		});
         
         //restapi = $('#restapi').text();
         

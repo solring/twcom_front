@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
-<!--
+
 <script src="{{ url_for('static', filename='lib/js/d3.v3.min.js') }}" charset="utf-8"></script>
 <script src="{{ url_for('static', filename='app/js/graph.js') }}" charset="utf-8"></script>
--->
+
 <script>
 /*
 var switchGraph = function(){
@@ -29,7 +29,11 @@ var switchGraph = function(){
         <h2>{{name}}</h2> 
         <hr>
         
-        <div class="panel panel-default">
+		<div class="panel panel-default">
+			<button id="graphbutton" type="button" class="btn btn-default btn-block">圖片說明</button>
+		</div>
+        
+		<div class="panel panel-default">
             <div class="panel-heading">
             {% if query_by == 'company' %}
                 董監事列表
@@ -50,7 +54,7 @@ var switchGraph = function(){
         
     </div>
 
-	<nav id="navtab" class="navbar navbar-default col-md-8">
+	<nav id="navtab" class="navbar navbar-default col-md-10">
 		<ul class="nav nav-tabs">
 			{% if query_by == 'company' %}
             <li class='active'><a id="company" class="graph-tab" href="#">公司投資<br>關係網路</a></li>
@@ -74,23 +78,43 @@ var switchGraph = function(){
         </div>
 	</nav>
 
-
-    <!-- Right sidebar -->
-    <div class="col-md-2 col-sm-2 sidebar" id="infopanel2" >
-        <div class="panel panel-default">
-            <div class="panel-heading">圖片說明</div>
-            <div id="graphinfo" class="panel-body"></div>
-            <div id="basicinfo" class="panel-body"></div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">節點資料</div>
-            <div id="nodeinfo" class="panel-body"></div>
-        </div>
-    </div>
 </div></div>
 <div style="visibility: hidden;" id="restapi">{{url}}</div>
 <div style="visibility: hidden;" id="graphtype">{{graph}}</div>
 <div style="visibility: hidden;" id="cid">{{cid}}</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalNode" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">董監事列表</h4>
+      </div>
+      <div class="modal-body">
+        <div id="nodeinfo"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="ModalInfo" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+		<h4 class="modal-title" id="myModalLabel">圖片說明</h4>
+      </div>
+      <div class="modal-body">
+        <div id="graphinfo"></div>
+		<div id="basicinfo"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 
