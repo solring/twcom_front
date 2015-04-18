@@ -26,28 +26,34 @@ var switchGraph = function(){
         <h2>{{name}}</h2> 
         <hr>
         
-	{% if query_by == 'company' %}
-        <h3>董監事列表</h3>
-	{% elif query_by == 'boss' %}
-        <h3>名下持有公司</h3>
-	{% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+            {% if query_by == 'company' %}
+                董監事列表
+            {% elif query_by == 'boss' %}
+                名下持有公司
+            {% endif %}
+            </div>
 
-        <div id="bossinfo">
-        {% for boss in bosslist %}
-            <a href="/board/id/{{boss['id']}}/{{boss['name']}}">
-                {{boss['name']}}
-            </a><br>
-        {% endfor %}
+            <div id="bossinfo" class="panel-body">
+            {% for boss in bosslist %}
+                <a href="/board/id/{{boss['id']}}/{{boss['name']}}">
+                    {{boss['name']}}
+                </a><br>
+            {% endfor %}
+            </div>
         </div>
-        <hr>
+       
+        <div class="panel panel-default">
+            <div class="panel-heading">圖片說明</div>
+            <div id="graphinfo" class="panel-body"></div>
+            <div id="basicinfo" class="panel-body"></div>
+        </div>
         
-        <h3>圖片說明</h3>
-        <div id="graphinfo"></div>
-        <div id="basicinfo"></div>
-        <hr>
-		
-        <h3>節點資料</h3>
-        <div id="nodeinfo" class="info"></div>
+        <div class="panel panel-default">
+            <div class="panel-heading">節點資料</div>
+            <div id="nodeinfo" class="panel-body"></div>
+        </div>
     </div>
 
 	<nav id="navtab" class="navbar navbar-default col-md-9">
@@ -56,10 +62,10 @@ var switchGraph = function(){
             <li class='active'><a id="company" class="graph-tab" href="#">公司投資<br>關係網路</a></li>
 			<li><a id="companyaddr" class="graph-tab" href="#">公司網路<br> by 地址</a></li>
 			<li><a id="companyboard" class="graph-tab" href="#">公司&<br>董監事網路</a></li>  
-			<li><a id="board" class="graph-tab" href="#">公司&<br>董監事網路</a></li>  
+<!--			<li><a id="board" class="graph-tab" href="#">公司&<br>董監事網路</a></li>  -->
 			{% elif query_by == 'boss' %}
 			<li class='active'><a id="company-by-boss" class="graph-tab" href="#">持有之公司網路</a></li>
-            <li class='disable'><a id="boss-relation" class="graph-tab" href="#">董監事關係</a></li>
+            <li class='disable'><a id="board" class="graph-tab" href="#">董監事關係</a></li>
             {% endif %}
         <!--
         <div id="zoom-btn-group" class="btn-group">
