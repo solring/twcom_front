@@ -15,26 +15,26 @@ col = None
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app) # for gunicorn
 
-def getidlike(query):
-    res = requests.get("http://dataing.pw/query?com=%s" % query)
+def getFromAPI(uri):
+    res = requests.get(uri)
+    if res.status_code != 200:
+        return "Sorry~ API is not available now ^_^\""
     if res!="null":
-        print res.json()
-        return json.loads(res.json())
+        try:
+            print res.json()
+            return json.loads(res.json())
+        except:
+            return "Sorry~ API is not available now ^_^\""
+            
+
+def getidlike(query):
+    getFromAPI("http://106.187.49.17/query?com=%s" % query)
 
 def getbosslike(query):
-    res = requests.get("http://dataing.pw/query?boss=%s" % query)
-    if res!="null":
-
-        print res.json()
-        return json.loads(res.json())
+    getFromAPI("http://106.187.49.17/query?boss=%s" % query)
 
 def getbossfromid(query):
-    res = requests.get("http://dataing.pw/query?board=%s" % query)
-    if res!="null":
-        print "------ before res.json"
-        print res.json()
-        print "------- after res.json"
-        return json.loads(res.json())		
+    getFromAPI("http://106.187.49.17/query?board=%s" % query)
 
 def to_node(d):
     return {"id": d["id"],
