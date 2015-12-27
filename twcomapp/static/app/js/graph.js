@@ -37,7 +37,7 @@
         //update explaination
         $('#graphinfo').empty().append("<p>" + graph_info[graphtype] + "</p>")
 
-        restapi = "http://dataing.pw/" + graph_hash[graphtype] + "=" + cid + "&maxlvl=1";
+        restapi = graph_hash[graphtype] + "=" + cid + "&maxlvl=1";
         console.log("switchGraph: restapi = " + restapi);
         $.getJSON("/getjson?api="+ encodeURIComponent(restapi) , json_update_callback); //end get JSON 
         //return window.location = 'http://twcom-analysis.herokuapp.com/' + graphtype + '/id/' + $('#bosslist').text();
@@ -317,7 +317,7 @@
         //restapi = $('#restapi').text();
         
         // get json through API
-        restapi = "http://dataing.pw/" + graph_hash[graphtype]+ "=" + cid;
+        restapi = graph_hash[graphtype]+ "=" + cid;
         if(graphtype!="company-by-boss") restapi = restapi + "&maxlvl=1";
 
         console.log("getting "+ cid + "from "+ restapi + "......" + encodeURIComponent(restapi) + " 4");

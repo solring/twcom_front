@@ -9,11 +9,11 @@ import re
 import requests
 from urllib import unquote
 
-db = None
-col = None
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app) # for gunicorn
+
+api_host = "http://106.187.49.17"
 
 def getFromAPI(uri):
     res = requests.get(uri)
@@ -28,13 +28,13 @@ def getFromAPI(uri):
             
 
 def getidlike(query):
-    getFromAPI("http://106.187.49.17/query?com=%s" % query)
+    return getFromAPI("%s/query?com=%s" % (api_host, query))
 
 def getbosslike(query):
-    getFromAPI("http://106.187.49.17/query?boss=%s" % query)
+    return getFromAPI("%s/query?boss=%s" % (api_host, query))
 
 def getbossfromid(query):
-    getFromAPI("http://106.187.49.17/query?board=%s" % query)
+    return getFromAPI("%s/query?board=%s" % (api_host, query))
 
 def to_node(d):
     return {"id": d["id"],
@@ -110,7 +110,7 @@ def search_companynet():
 def getJson():
     print "in getjson" 
     if 'api' in request.args:
-        url = request.args['api']
+        url = api_host + "/" + request.args['api']
         print url
         print unquote(url)
 
