@@ -116,6 +116,7 @@ def getJson():
 
         data = requests.get(unquote(url))
 
+        if data.status_code != 200:
             return jsonify({ "error" : "REST API error - %s" % data.status_code})
         else: 
             return jsonify(data.json())
