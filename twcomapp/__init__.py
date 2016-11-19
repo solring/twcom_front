@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #from pymongo import MongoClient
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, jsonify
 from werkzeug.contrib.fixers import ProxyFix # for gunicorn
 import json
 import re
@@ -15,26 +15,26 @@ col = None
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app) # for gunicorn
 
+def showjson(jsons):
+    return json.dumps(jsons, indent=2, encoding='utf8', sort_keys=True, ensure_ascii=False)
+
 def getidlike(query):
     res = requests.get("http://106.187.49.17/query?com=%s" % query)
-    if res!="null":
-        print res.json()
-        return json.loads(res.json())
+    if res.json():
+        print showjson(res.json())
+        return res.json()
 
 def getbosslike(query):
     res = requests.get("http://106.187.49.17/query?boss=%s" % query)
-    if res!="null":
-
-        print res.json()
-        return json.loads(res.json())
+    if res.json():
+        print showjson(res.json())
+        return res.json()
 
 def getbossfromid(query):
     res = requests.get("http://106.187.49.17/query?board=%s" % query)
-    if res!="null":
-        print "------ before res.json"
-        print res.json()
-        print "------- after res.json"
-        return json.loads(res.json())		
+    if res.json():
+        print showjson(res.json())
+        return res.json()
 
 def to_node(d):
     return {"id": d["id"],
@@ -115,12 +115,12 @@ def getJson():
         print unquote(url)
 
         data = requests.get(unquote(url))
-        if data.status_code != 200:
-            return json.dumps({ "error" : "REST API error - %s" % data.status_code})
+
+            return jsonify({ "error" : "REST API error - %s" % data.status_code})
         else: 
-            return data.json()
+            return jsonify(data.json())
     else:
-        return json.dumps({ "error" : "GET argument error - %s"})
+        return jsonify({ "error" : "GET argument error - %s"})
 #    G = get_network(cid, maxlvl=1)
 #    if G:
 #        return exp_company(G, "%s.cache" % cid)
