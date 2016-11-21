@@ -23,18 +23,24 @@ def getidlike(query):
     if res.json():
         print showjson(res.json())
         return res.json()
+    else:
+        return {}
 
 def getbosslike(query):
     res = requests.get("http://106.187.49.17/query?boss=%s" % query)
     if res.json():
         print showjson(res.json())
         return res.json()
+    else:
+        return {}
 
 def getbossfromid(query):
     res = requests.get("http://106.187.49.17/query?board=%s" % query)
     if res.json():
         print showjson(res.json())
         return res.json()
+    else:
+        return {}
 
 def to_node(d):
     return {"id": d["id"],
